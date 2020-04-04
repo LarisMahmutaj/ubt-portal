@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { UbtpostsModule } from './ubtposts/ubtposts.module';
+import config from './config/keys';
 
 @Module({
-  imports: [],
+  imports: [UbtpostsModule, MongooseModule.forRoot(config.mongoURI)],
   controllers: [AppController],
   providers: [AppService],
 })
