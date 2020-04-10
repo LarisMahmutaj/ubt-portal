@@ -10,7 +10,9 @@
     <v-card-text class="headline font-weight-bold body-1">
       {{ ubtpost.content }}
     </v-card-text>
-
+    <v-card-text class="caption">
+      {{ moment(ubtpost.date).format("DD/MM/YYYY hh:mm") }}
+    </v-card-text>
     <v-card-actions>
       <v-list-item small class="grow">
         <v-list-item-avatar size="35" color="grey darken-3">

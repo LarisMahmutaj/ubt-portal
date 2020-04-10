@@ -4,9 +4,9 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueRouter from "vue-router";
 import { routes } from "./routes";
-import moment from "moment-timezone";
-
-moment.tz.setDefault("Europe/Tirane");
+import moment from "moment";
+Vue.prototype.moment = moment;
+Vue.use(moment);
 Vue.config.productionTip = false;
 Vue.use(VueRouter);
 const router = new VueRouter({

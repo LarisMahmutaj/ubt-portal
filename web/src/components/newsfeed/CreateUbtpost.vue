@@ -40,7 +40,6 @@
 
 <script>
 import { mapActions } from "vuex";
-import moment from "moment";
 export default {
   name: "createubtposts",
   data() {
@@ -63,7 +62,8 @@ export default {
       // );
       // console.log(response.data);
       var newPost = { ...this.ubtpost };
-      newPost.date = moment();
+      newPost.date = new Date();
+
       this.createUbtpost(newPost);
       this.$router.go();
     }
