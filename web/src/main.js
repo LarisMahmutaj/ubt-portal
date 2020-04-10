@@ -4,10 +4,13 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueRouter from "vue-router";
 import { routes } from "./routes";
+import moment from "moment-timezone";
+
+moment.tz.setDefault("Europe/Tirane");
 Vue.config.productionTip = false;
 Vue.use(VueRouter);
 const router = new VueRouter({
-  routes,
+  routes
 });
 
 new Vue({
@@ -17,5 +20,5 @@ new Vue({
   vuetify,
   store,
   router,
-  render: (h) => h(App),
+  render: h => h(App)
 });

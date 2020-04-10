@@ -1,9 +1,11 @@
+:
 <template>
-  <v-card class="mx-auto my-4" color="#FCFCFC" max-width="550">
-    <v-card-title>
-      <v-icon color="blue" large left>toys</v-icon>
+  <v-card class="mx-auto my-5" color="#FCFCFC" max-width="550">
+    <!-- <v-card-title>
+      just a min in a voicee call
+      <v-icon color="blue" large left>mdi-phone</v-icon>
       <span class="title font-weight-light">{{ ubtpost.title }}</span>
-    </v-card-title>
+    </v-card-title> -->
 
     <v-card-text class="headline font-weight-bold body-1">
       {{ ubtpost.content }}
@@ -44,7 +46,7 @@
 <script>
 export default {
   name: "Ubtpost",
-  props: ["ubtpost"],
+  props: ["ubtpost"]
 };
 </script>
 
