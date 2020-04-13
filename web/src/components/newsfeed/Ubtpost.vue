@@ -1,17 +1,28 @@
 :
 <template>
   <v-card class="mx-auto my-5" color="#FCFCFC" max-width="550">
-    <!-- <v-card-title>
-      just a min in a voicee call
-      <v-icon color="blue" large left>mdi-phone</v-icon>
-      <span class="title font-weight-light">{{ ubtpost.title }}</span>
-    </v-card-title> -->
+    <v-card-title class="d-flex justify-end">
+      <div class="text-center">
+        <v-menu offset-y>
+          <template v-slot:activator="{ on }">
+            <v-btn icon light v-on="on">
+              <v-icon>mdi-dots-horizontal</v-icon></v-btn
+            >
+          </template>
+          <v-list>
+            <v-list-item>Edit</v-list-item>
+            <v-list-item @click="deletePost">Delete</v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
+    </v-card-title>
 
     <v-card-text class="headline font-weight-bold body-1">
       {{ ubtpost.content }}
     </v-card-text>
+
     <v-card-text class="caption">
-      {{ moment(ubtpost.date).format("DD/MM/YYYY hh:mm") }}
+      {{ moment(ubtpost.date).format("DD/MM/YYYY HH:mm") }}
     </v-card-text>
     <v-card-actions>
       <v-list-item small class="grow">
@@ -46,9 +57,19 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "Ubtpost",
-  props: ["ubtpost"]
+  props: ["ubtpost"],
+  methods: {
+    ...mapActions(["deleteUbtpost"]),
+
+    deletePost() {
+      this.deleteUbtpost(this.ubtpost._id);
+      this.$router.go();
+    }
+  }
 };
 </script>
 

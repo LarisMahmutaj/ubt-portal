@@ -55,7 +55,7 @@ export default {
   methods: {
     ...mapActions(["createUbtpost"]),
 
-    async onSubmit() {
+    onSubmit() {
       // const response = await axios.post(
       //   "http://localhost:3000/ubtposts",
       //   this.ubtpost

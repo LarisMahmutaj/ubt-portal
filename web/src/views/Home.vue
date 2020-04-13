@@ -13,21 +13,22 @@
 </template>
 
 <script>
+how;
 // @ is an alias to /src
-import { mapGetters, mapActions } from "vuex";
-import AppBar from "../components/layout/AppBar";
-import Ubtpost from "../components/newsfeed/Ubtpost";
-import CreateUbtpost from "../components/newsfeed/CreateUbtpost";
-
+import { mapGetters, mapActions } from 'vuex';
+import AppBar from '../components/layout/AppBar';
+import Ubtpost from '../components/newsfeed/Ubtpost';
+import CreateUbtpost from '../components/newsfeed/CreateUbtpost';
+//
 export default {
   data() {
     return {
       ubtposts: []
     };
   },
-  name: "Home",
+  name: 'Home',
   computed: {
-    ...mapGetters(["allUbtposts"])
+    ...mapGetters(['allUbtposts'])
   },
   components: {
     AppBar: AppBar,
@@ -38,7 +39,7 @@ export default {
     this.fetchUbtposts();
   },
   methods: {
-    ...mapActions(["fetchUbtposts"])
+    ...mapActions(['fetchUbtposts'])
   }
 };
 </script>
