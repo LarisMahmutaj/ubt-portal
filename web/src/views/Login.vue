@@ -18,26 +18,35 @@
             <v-spacer></v-spacer>
             <v-card-title class="caption "
               >Don't have an account?
-              <v-subtitle class="mx-1 primary--text font-weight-bold"
-                >Register</v-subtitle
+              <v-card-subtitle class="primary--text font-weight-bold">
+                <router-link to="/register"
+                  >Register</router-link
+                ></v-card-subtitle
               ></v-card-title
             >
           </div>
           <div>
             <v-container>
-              <v-form>
-                <v-text-field label="Username" required></v-text-field>
+              <v-form @submit.prevent="onSubmit">
+                <v-text-field
+                  v-model="formData.email"
+                  label="Email"
+                  required
+                ></v-text-field>
                 <v-text-field
                   label="Password"
+                  v-model="formData.password"
                   :type="showPassword ? 'text' : 'password'"
                   required
                   :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                   @click:append="showPassword = !showPassword"
                 ></v-text-field>
-                <v-btn block color="primary">Log IN</v-btn>
+                <v-btn type="submit" block color="primary">Log IN</v-btn>
               </v-form>
-              <div class="py-5 d-flex justify-start">
-                <v-title class="font-weight-bold">Or sign in with</v-title>
+              <div class="d-flex justify-start mx-auto ">
+                <v-card-title class="font-weight-bold subtitle-1"
+                  >Or sign in with</v-card-title
+                >
               </div>
               <div class="d-flex justify-space-around">
                 <v-btn class="mx-1"
@@ -57,11 +66,23 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
+      formData: {
+        email: '',
+        password: '',
+      },
       showPassword: false,
     };
+  },
+  methods: {
+    ...mapActions(['login']),
+
+    onSubmit() {
+      this.login(this.formData).then(this.$router.push('home'));
+    },
   },
 };
 </script>

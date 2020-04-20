@@ -16,6 +16,7 @@ const actions = {
 
   async createUbtpost({ commit }, ubtpost) {
     const response = await axios.post("http://localhost:3000/ubtposts", ubtpost)
+
     commit("ADD_POST", response.data)
   },
 

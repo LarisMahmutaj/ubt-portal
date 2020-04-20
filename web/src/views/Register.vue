@@ -16,21 +16,27 @@
             <v-spacer></v-spacer>
             <v-card-title class="caption"
               >Are you a member?
-              <v-card-subtitle class="px-1 indigo--text">Login</v-card-subtitle>
+              <router-link class="textDecoration-none" to="/"
+                ><v-card-subtitle class=" primary--text font-weight-bold "
+                  >Login</v-card-subtitle
+                ></router-link
+              >
             </v-card-title>
           </div>
-          <div class="d-flex justify-space-around  pb-5">
-            <v-btn depressed flat outlined color="primary">
+          <div class="d-flex justify-space-around  ">
+            <v-btn depressed outlined color="primary">
               <v-icon class="mx-2 ">$vuetify.icons.custom</v-icon>
               Google</v-btn
             >
 
-            <v-btn light depressed flat color="primary">
+            <v-btn light depressed color="primary">
               <v-icon class="mx-2">mdi-facebook</v-icon>
               Facebook</v-btn
             >
           </div>
-          <v-title class="mx-4 font-weight-bold">Or with E-mail</v-title>
+          <v-card-title class=" subtitle-1 font-weight-bold"
+            >Or with E-mail</v-card-title
+          >
           <div>
             <v-container>
               <v-form>
