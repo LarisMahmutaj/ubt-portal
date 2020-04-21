@@ -11,7 +11,21 @@ Vue.use(moment)
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 const router = new VueRouter({
-  routes
+  mode: "history",
+  routes,
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiredAuth)) {
+    if (store.getters.loggedIn) {
+      next()
+      return
+    }
+
+    next("/")
+  } else {
+    next()
+  }
 })
 
 new Vue({
@@ -21,5 +35,5 @@ new Vue({
   vuetify,
   store,
   router,
-  render: h => h(App)
+  render: (h) => h(App),
 })
