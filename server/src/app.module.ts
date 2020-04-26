@@ -12,7 +12,7 @@ dotenv.config();
 @Module({
   imports: [
     UbtpostsModule,
-    MongooseModule.forRoot(process.env.MONGO_URI),
+    MongooseModule.forRoot(process.env.MONGO_URI, {useFindAndModify: false, useUnifiedTopology: true, useNewUrlParser: true}, ),
     UsersModule,
     AuthModule,
   ],
