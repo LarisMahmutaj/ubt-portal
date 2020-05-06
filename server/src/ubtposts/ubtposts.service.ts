@@ -1,34 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { Ubtpost } from './interfaces/ubtpost.interface';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+import { Ubtpost } from './ubtposts.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UbtpostsService {
   constructor(
-    @InjectModel('Ubtpost') private readonly ubtpostModel: Model<Ubtpost>,
+    @InjectRepository(Ubtpost) private ubtposts: Repository<Ubtpost>,
   ) {}
 
   async findAll(): Promise<Ubtpost[]> {
-    return await this.ubtpostModel.find();
+    return await this.ubtposts.find({
+      order: {
+        date: 'DESC',
+      },
+    });
   }
 
   async findOne(id: string): Promise<Ubtpost> {
-    return await this.ubtpostModel.findOne({ _id: id });
+    return await this.ubtposts.findOne({ ubtpostId: id });
   }
 
-  async create(ubtpost: Ubtpost): Promise<Ubtpost> {
-    const newUbtpost = new this.ubtpostModel(ubtpost);
-    return await newUbtpost.save();
+  async create(ubtpost: Ubtpost) {
+    return await this.ubtposts.insert(ubtpost);
   }
 
-  async delete(id: string): Promise<Ubtpost> {
-    return await this.ubtpostModel.findByIdAndRemove(id);
+  async delete(id: string) {
+    return await this.ubtposts.delete(id);
   }
 
-  async update(id: string, ubtpost: Ubtpost): Promise<Ubtpost> {
-    return await this.ubtpostModel.findByIdAndUpdate(id, ubtpost, {
-      new: true,
-    });
+  async update(ubtpostId: string, content: string) {
+    return await this.ubtposts.update({ ubtpostId }, { content });
   }
 }

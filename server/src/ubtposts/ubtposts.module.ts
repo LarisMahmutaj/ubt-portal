@@ -1,14 +1,11 @@
 import { UbtpostsService } from './ubtposts.service';
-import { Ubtpost } from './interfaces/ubtpost.interface';
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { UbtpostsController } from './ubtposts.controller';
-import { UbtpostSchema } from './schemas/ubtpost.schema';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Ubtpost } from './ubtposts.entity';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: 'Ubtpost', schema: UbtpostSchema }]),
-  ],
+  imports: [TypeOrmModule.forFeature([Ubtpost])],
   controllers: [UbtpostsController],
   providers: [UbtpostsService],
 })
