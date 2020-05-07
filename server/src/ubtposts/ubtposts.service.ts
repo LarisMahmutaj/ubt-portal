@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Ubtpost } from './ubtposts.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, InsertResult } from 'typeorm';
 
 @Injectable()
 export class UbtpostsService {
@@ -17,11 +17,11 @@ export class UbtpostsService {
     });
   }
 
-  async findOne(id: string): Promise<Ubtpost> {
-    return await this.ubtposts.findOne({ ubtpostId: id });
+  async findOne(ubtpostId: string): Promise<Ubtpost> {
+    return await this.ubtposts.findOne({ ubtpostId });
   }
 
-  async create(ubtpost: Ubtpost) {
+  async create(ubtpost: Ubtpost): Promise<InsertResult> {
     return await this.ubtposts.insert(ubtpost);
   }
 

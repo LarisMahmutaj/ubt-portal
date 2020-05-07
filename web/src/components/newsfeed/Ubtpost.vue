@@ -162,21 +162,8 @@ export default {
 
   methods: {
     ...mapActions(['deleteUbtpost', 'editUbtpost']),
-			deletePost() {
-				this.deleteUbtpost(this.ubtpost.ubtpostId);
-				this.deleteDialog = false;
-				this.$router.go();
-			},
-			editPost() {
-				this.editUbtpost(this.newPost);
-				this.$router.go();
-			}
-		}
-	};
-</script>
-
     deletePost() {
-      this.deleteUbtpost(this.ubtpost._id);
+      this.deleteUbtpost(this.ubtpost.ubtpostId);
       this.deleteDialog = false;
       this.$router.go();
     },
