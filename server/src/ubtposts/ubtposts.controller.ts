@@ -6,35 +6,45 @@ import {
   Delete,
   Param,
   Body,
+  UseGuards,
 } from '@nestjs/common';
 import { UbtpostsService } from './ubtposts.service';
-import { CreateUbtpostDto } from './dto/create-ubtpost.dto';
-import { Ubtpost } from './interfaces/ubtpost.interface';
+import { CreateUbtpostDto } from './ubtpost.dto';
+import { Ubtpost } from './ubtposts.entity';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { UpdateResult, DeleteResult, InsertResult } from 'typeorm';
 
 @Controller('ubtposts')
 export class UbtpostsController {
   constructor(private readonly ubtpostsService: UbtpostsService) {}
+
   @Get()
   findAll(): Promise<Ubtpost[]> {
     return this.ubtpostsService.findAll();
   }
+
   @Get(':id')
   findOne(@Param('id') id): Promise<Ubtpost> {
     return this.ubtpostsService.findOne(id);
   }
+
   @Post()
-  create(@Body() createUbtpostDto: CreateUbtpostDto): Promise<Ubtpost> {
-    return this.ubtpostsService.create(createUbtpostDto);
+  create(@Body() createUbtpostDto: CreateUbtpostDto): Promise<InsertResult> {
+    const newPost = new Ubtpost(createUbtpostDto);
+    return this.ubtpostsService.create(newPost);
   }
+
   @Put(':id')
   update(
     @Body() updateUbtpostDto: CreateUbtpostDto,
     @Param('id') id,
-  ): Promise<Ubtpost> {
-    return this.ubtpostsService.update(id, updateUbtpostDto);
+  ): Promise<UpdateResult> {
+    const updatedPost = new Ubtpost(updateUbtpostDto);
+    return this.ubtpostsService.update(id, updatedPost.content);
   }
+
   @Delete(':id')
-  delete(@Param('id') id): Promise<Ubtpost> {
+  delete(@Param('id') id): Promise<DeleteResult> {
     return this.ubtpostsService.delete(id);
   }
 }

@@ -1,11 +1,11 @@
 import axios from "axios"
 
 const state = {
-  ubtposts: []
+  ubtposts: [],
 }
 
 const getters = {
-  allUbtposts: state => state.ubtposts.reverse()
+  allUbtposts: (state) => state.ubtposts,
 }
 
 const actions = {
@@ -27,13 +27,13 @@ const actions = {
 
   async editUbtpost({ commit }, ubtpost) {
     const response = await axios.put(
-      `http://localhost:3000/ubtposts/${ubtpost._id}`,
+      `http://localhost:3000/ubtposts/${ubtpost.ubtpostId}`,
       ubtpost
     )
     /*eslint-disable*/
     // console.log(response.data)
     commit("EDIT_UBTPOST", response.data)
-  }
+  },
 }
 
 const mutations = {
@@ -46,13 +46,13 @@ const mutations = {
   },
 
   DELETE_UBTPOST: (state, ubtpost) => {
-    var id = ubtpost._id
-    state.ubtposts.filter(post => post._id === id)
+    var id = ubtpost.ubtpostId
+    state.ubtposts.filter((post) => post.ubtpostId === id)
   },
 
   EDIT_UBTPOST: (state, ubtpost) => {
     let elementIndex = state.ubtposts.findIndex(
-      item => item._id === ubtpost._id
+      (item) => item.ubtpostId === ubtpost.ubtpostId
     )
 
     let newArray = { ...state.ubtposts }
@@ -60,12 +60,12 @@ const mutations = {
     newArray[elementIndex] = ubtpost
 
     state.ubtposts = newArray
-  }
+  },
 }
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 }
