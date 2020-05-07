@@ -8,6 +8,10 @@ import { routes } from './routes';
 import moment from 'moment';
 import Axios from 'axios';
 import Vuelidate from 'vuelidate';
+import VuePrism from 'vue-prism';
+Vue.use(VuePrism);
+
+import 'prismjs/themes/prism-dracula.css';
 Vue.use(Vuelidate);
 
 Vue.prototype.moment = moment;
@@ -26,7 +30,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (auth.getters.loggedIn) {
+    if (store.getters.loggedIn) {
       console.log('hina');
       next();
       return;

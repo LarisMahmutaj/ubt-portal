@@ -2,6 +2,15 @@
   <div>
     <v-card class="mx-auto my-4" max-width="550">
       <v-form @submit.prevent="onSubmit">
+        <v-card flat
+          ><v-card-text v-if="showInfo"
+            ># for h1 Heading <br />** for bold text <br />
+            * for italic text <br />
+            `` for inline code <br />
+            ``` " " for block code<br />
+            ``` javascript "code here" `
+          </v-card-text></v-card
+        >
         <v-textarea
           placeholder="Whats happening?"
           flat
@@ -11,7 +20,11 @@
           rows="4"
           row-height="25"
           v-model="ubtpost.content"
-        ></v-textarea>
+          append-icon="mdi-information-outline"
+          @click:append="showInfo = !showInfo"
+        >
+        </v-textarea>
+
         <div class="buttons">
           <div>
             <v-btn depressed icon class="mx-2 my-2"
@@ -39,6 +52,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+
 export default {
   name: 'createubtposts',
   data() {
@@ -49,8 +63,10 @@ export default {
         date: null,
         user_id: '1528sdfsdf48',
       },
+      showInfo: false,
     };
   },
+
   methods: {
     ...mapActions(['createUbtpost']),
 

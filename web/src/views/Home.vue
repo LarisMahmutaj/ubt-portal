@@ -18,6 +18,7 @@ import { mapGetters, mapActions } from 'vuex';
 import AppBar from '../components/layout/AppBar';
 import Ubtpost from '../components/newsfeed/Ubtpost';
 import CreateUbtpost from '../components/newsfeed/CreateUbtpost';
+
 //
 export default {
   data() {
