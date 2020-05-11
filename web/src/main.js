@@ -11,22 +11,22 @@ import Vuelidate from 'vuelidate';
 import VuePrism from 'vue-prism';
 Vue.use(VuePrism);
 
-import 'prismjs/themes/prism-dracula.css';
+import 'prismjs/themes/prism-coy.css';
 Vue.use(Vuelidate);
 
-Vue.prototype.moment = moment
-Vue.prototype.$http = Axios
-const access_token = localStorage.getItem("access_token")
+Vue.prototype.moment = moment;
+Vue.prototype.$http = Axios;
+const access_token = localStorage.getItem('access_token');
 if (access_token) {
-  Vue.prototype.$http.defaults.headers.common["Authorization"] = access_token
+  Vue.prototype.$http.defaults.headers.common['Authorization'] = access_token;
 }
 
-Vue.use(moment)
-Vue.config.productionTip = false
-Vue.use(VueRouter)
+Vue.use(moment);
+Vue.config.productionTip = false;
+Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
-})
+});
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
@@ -36,19 +36,19 @@ router.beforeEach((to, from, next) => {
       return;
     }
 
-    next("/")
+    next('/');
   } else {
-    next()
+    next();
   }
-})
+});
 
 new Vue({
-  el: "#app",
+  el: '#app',
   components: { App },
-  template: "<App/>",
+  template: '<App/>',
   vuetify,
   auth,
   store,
   router,
   render: (h) => h(App),
-})
+});
