@@ -1,8 +1,8 @@
 <template>
 	<v-card class="mx-auto my-5" color="#FCFCFC" max-width="550">
 		<v-list color="transparent" class="d-flex justify-between py-0">
-			<v-card-text class="caption">
-				{{ moment(ubtpost.date).calendar() }}
+			<v-card-text class="body-1 font-weight-regualr">
+				Laris Mahmutaj
 			</v-card-text>
 			<div class="text-center">
 				<v-menu offset-y>
@@ -11,6 +11,7 @@
 							<v-icon>mdi-dots-horizontal</v-icon>
 						</v-btn>
 					</template>
+					>>>>>>> a0c5f033b034d1cc6d5a329e1444c74d57386d1e
 
 					<v-list class="py-0 ma-0">
 						<v-list-item class="px-0  mb-n3">
@@ -121,7 +122,9 @@
 		<v-card-actions>
 			<v-list-item small class="grow">
 				<v-list-item-content>
-					<v-list-item-title class="caption">Evan You</v-list-item-title>
+					<v-list-item-title class="caption">
+						{{ moment(ubtpost.date).calendar() }}</v-list-item-title
+					>
 				</v-list-item-content>
 
 				<v-row align="center" justify="end">

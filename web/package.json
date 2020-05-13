@@ -38,20 +38,20 @@
     "babel-preset-stage-3": "^6.24.1",
     "cross-env": "^7.0.2",
     "css-loader": "^3.5.3",
-    "eslint": "^6.8.0",
+    "eslint": "^7.0.0",
     "eslint-plugin-vue": "^6.2.2",
     "file-loader": "^6.0.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "vue-cli-plugin-vuetify": "~2.0.5",
-    "vue-loader": "^16.0.0-beta.1",
+    "vue-loader": "^15.9.2",
     "vue-markdown-highlight": "^1.0.5",
     "vue-prism": "^1.0.5",
     "vue-svg-loader": "^0.16.0",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.4.3",
     "webpack": "^4.43.0",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.11.0"
   },
   "eslintConfig": {
     "root": true,

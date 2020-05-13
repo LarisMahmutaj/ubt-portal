@@ -10,8 +10,6 @@ import Axios from "axios"
 import Vuelidate from "vuelidate"
 import VuePrism from "vue-prism"
 
-Vue.use(VuePrism)
-
 import "prismjs/themes/prism-coy.css"
 Vue.use(Vuelidate)
 

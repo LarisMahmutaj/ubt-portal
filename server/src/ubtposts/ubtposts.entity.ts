@@ -16,7 +16,7 @@ export class Ubtpost {
   @PrimaryGeneratedColumn('uuid')
   ubtpostId: string;
 
-  @Column('varchar', { length: 1000 })
+  @Column('varchar', { length: 5000 })
   content: string;
 
   @Column()
