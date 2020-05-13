@@ -13,31 +13,31 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import { mapGetters, mapActions } from 'vuex';
-import AppBar from '../components/layout/AppBar';
-import Ubtpost from '../components/newsfeed/Ubtpost';
-import CreateUbtpost from '../components/newsfeed/CreateUbtpost';
+	// @ is an alias to /src
+	import { mapGetters, mapActions } from "vuex";
+	import AppBar from "../components/layout/AppBar";
+	import Ubtpost from "../components/newsfeed/Ubtpost";
+	import CreateUbtpost from "../components/newsfeed/CreateUbtpost";
 
-//
-export default {
-  data() {
-    return {
-      ubtposts: [],
-    };
-  },
-  name: 'Home',
-  computed: {
-    ...mapGetters(['allUbtposts', 'loggedIn']),
-  },
-  components: {
-    AppBar: AppBar,
-    Ubtpost: Ubtpost,
-    CreateUbtpost: CreateUbtpost,
-  },
-  created() {
-    this.$forceUpdate(this.fetchUbtposts());
-  },
+	//
+	export default {
+		data() {
+			return {
+				ubtposts: []
+			};
+		},
+		name: "Home",
+		computed: {
+			...mapGetters(["allUbtposts", "loggedIn"])
+		},
+		components: {
+			AppBar: AppBar,
+			Ubtpost: Ubtpost,
+			CreateUbtpost: CreateUbtpost
+		},
+		async created() {
+			await this.fetchUbtposts();
+		},
 
 		methods: {
 			...mapActions(["fetchUbtposts"])

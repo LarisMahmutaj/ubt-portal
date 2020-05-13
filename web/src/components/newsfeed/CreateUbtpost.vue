@@ -16,6 +16,7 @@
           flat
           hide-details
           rounded
+          required
           auto-grow
           rows="4"
           row-height="25"
