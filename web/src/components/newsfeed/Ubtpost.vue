@@ -11,8 +11,6 @@
 							<v-icon>mdi-dots-horizontal</v-icon>
 						</v-btn>
 					</template>
-					>>>>>>> a0c5f033b034d1cc6d5a329e1444c74d57386d1e
-
 					<v-list class="py-0 ma-0">
 						<v-list-item class="px-0  mb-n3">
 							<!-- Edit Modal -->
