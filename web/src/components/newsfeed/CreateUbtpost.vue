@@ -53,7 +53,7 @@
 </template>
 
 <script>
-	import { mapActions } from "vuex";
+	import { mapActions, mapGetters } from "vuex";
 
 	export default {
 		name: "createubtposts",
@@ -63,12 +63,14 @@
 					title: "Title placeholder",
 					content: "",
 					date: null,
-					user_id: "1528sdfsdf48"
+					authorId: null
 				},
 				showInfo: false
 			};
 		},
-
+		computed: {
+			...mapGetters(["user"])
+		},
 		methods: {
 			...mapActions(["createUbtpost"]),
 
@@ -80,6 +82,7 @@
 				// console.log(response.data);
 				var newPost = { ...this.ubtpost };
 				newPost.date = new Date();
+				newPost.authorId = this.user.userId;
 
 				await this.createUbtpost(newPost);
 				this.$router.go();

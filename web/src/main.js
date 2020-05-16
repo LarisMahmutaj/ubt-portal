@@ -12,6 +12,7 @@ import VuePrism from "vue-prism"
 
 import "prismjs/themes/prism-coy.css"
 Vue.use(Vuelidate)
+Vue.use(VuePrism)
 
 Vue.prototype.moment = moment
 Vue.prototype.$http = Axios

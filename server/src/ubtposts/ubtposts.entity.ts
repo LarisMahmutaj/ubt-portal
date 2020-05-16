@@ -2,7 +2,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToOne,
+  ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import { User } from 'src/users/users.entity';
@@ -22,7 +22,12 @@ export class Ubtpost {
   @Column()
   date: Date;
 
-  @OneToOne((type) => User)
-  @JoinColumn()
-  user: User;
+  @Column()
+  authorId: string;
+
+  @ManyToOne((type) => User, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'authorId' })
+  author: User;
 }

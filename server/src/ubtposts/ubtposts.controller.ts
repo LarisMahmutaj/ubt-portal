@@ -31,6 +31,9 @@ export class UbtpostsController {
   @Post()
   create(@Body() createUbtpostDto: CreateUbtpostDto): Promise<InsertResult> {
     const newPost = new Ubtpost(createUbtpostDto);
+    const { authorId } = createUbtpostDto;
+
+    newPost.authorId = authorId;
     return this.ubtpostsService.create(newPost);
   }
 

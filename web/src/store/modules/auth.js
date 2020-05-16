@@ -7,6 +7,7 @@ const state = {
 
 const getters = {
   loggedIn: (state) => state.loggedIn,
+  user: (state) => state.user,
 }
 
 const actions = {

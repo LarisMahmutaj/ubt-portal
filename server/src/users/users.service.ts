@@ -9,10 +9,24 @@ export class UsersService {
   constructor(@InjectRepository(User) private users: Repository<User>) {}
 
   async findOne(email: string): Promise<User> {
-    return this.users.findOne({ email: email });
+    return await this.users.findOne({ email: email });
   }
 
-  async findById(id: string): Promise<User> {
+  async findOneWithPassword(email: string): Promise<User> {
+    const user = await this.users
+      .createQueryBuilder('user')
+      .select('user.userId')
+      .select('user.username')
+      .addSelect('user.email')
+      .addSelect('user.date')
+      .addSelect('user.password')
+      .where('user.email = :e', { e: email })
+      .getOne();
+
+    return user;
+  }
+
+  async findById(id: string) {
     return this.users.findOne({ userId: id });
   }
 

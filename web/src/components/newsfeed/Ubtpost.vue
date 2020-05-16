@@ -1,10 +1,10 @@
 <template>
 	<v-card class="mx-auto my-5" color="#FCFCFC" max-width="550">
 		<v-list color="transparent" class="d-flex justify-between py-0">
-			<v-card-text class="body-1 font-weight-regualr">
-				Laris Mahmutaj
+			<v-card-text class="body-1 font-weight-bold">
+				{{ ubtpost.author.username }}
 			</v-card-text>
-			<div class="text-center">
+			<div class="text-center" v-if="ubtpost.authorId === user.userId">
 				<v-menu offset-y>
 					<template v-slot:activator="{ on }">
 						<v-btn icon light v-on="on">
@@ -144,7 +144,7 @@
 </template>
 
 <script>
-	import { mapActions } from "vuex";
+	import { mapActions, mapGetters } from "vuex";
 	import VueMarkdown from "vue-markdown";
 
 	export default {
@@ -160,7 +160,9 @@
 		components: {
 			VueMarkdown
 		},
-
+		computed: {
+			...mapGetters(["user"])
+		},
 		methods: {
 			...mapActions(["deleteUbtpost", "editUbtpost", "fetchUbtposts"]),
 			deletePost() {

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="loggedIn">
 		<AppBar />
 		<v-container class="d-flex justify-center align-start">
 			<div style="width:280px;">
@@ -35,9 +35,7 @@
 	//
 	export default {
 		data() {
-			return {
-				ubtposts: []
-			};
+			return {};
 		},
 		name: "Home",
 		computed: {
@@ -50,7 +48,7 @@
 			Events: Events
 		},
 		created() {
-			this.$forceUpdate(this.fetchUbtposts());
+			this.fetchUbtposts();
 		},
 
 		methods: {

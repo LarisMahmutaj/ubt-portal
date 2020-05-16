@@ -14,6 +14,7 @@ export class UbtpostsService {
       order: {
         date: 'DESC',
       },
+      relations: ['author'],
     });
   }
 
@@ -22,7 +23,11 @@ export class UbtpostsService {
   }
 
   async create(ubtpost: Ubtpost): Promise<InsertResult> {
-    return await this.ubtposts.insert(ubtpost);
+    return await this.ubtposts.insert({
+      content: ubtpost.content,
+      date: ubtpost.date,
+      authorId: ubtpost.authorId,
+    });
   }
 
   async delete(id: string) {
