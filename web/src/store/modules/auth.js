@@ -35,6 +35,7 @@ const actions = {
 
 const mutations = {
   SET_USER_DATA: (state, user) => {
+    console.log(user.userId)
     state.user = user
     state.loggedIn = true
     localStorage.setItem("user", JSON.stringify(user))
