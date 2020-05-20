@@ -9,7 +9,7 @@
 							* for italic text <br />
 							`` for inline code <br />
 							``` " " for block code<br />
-							``` javascript "code here" `
+							```language-name "code here" ```
 						</v-card-text></v-card
 					>
 					<v-textarea
@@ -60,7 +60,6 @@
 		data() {
 			return {
 				ubtpost: {
-					title: "Title placeholder",
 					content: "",
 					date: null,
 					authorId: null
@@ -72,7 +71,7 @@
 			...mapGetters(["user"])
 		},
 		methods: {
-			...mapActions(["createUbtpost"]),
+			...mapActions(["createUbtpost", "fetchUbtposts"]),
 
 			async onSubmit() {
 				// const response = await axios.post(
@@ -85,7 +84,9 @@
 				newPost.authorId = this.user.userId;
 
 				await this.createUbtpost(newPost);
-				this.$router.go();
+				this.ubtpost.content = "";
+				this.ubtpost.date = null;
+				await this.fetchUbtposts();
 			}
 		}
 	};

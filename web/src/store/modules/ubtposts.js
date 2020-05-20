@@ -25,13 +25,13 @@ const actions = {
   },
 
   async editUbtpost({ commit }, ubtpost) {
+    /*eslint-disable*/
     const response = await axios.put(
       `http://localhost:3000/ubtposts/${ubtpost.ubtpostId}`,
       ubtpost
     )
-    /*eslint-disable*/
-    // console.log(response.data)
-    commit("EDIT_UBTPOST", response.data)
+    console.log(ubtpost)
+    commit("EDIT_UBTPOST", ubtpost)
   },
 }
 
@@ -41,7 +41,6 @@ const mutations = {
   },
 
   ADD_POST: (state, ubtpost) => {
-    console.log(ubtpost.content)
     state.ubtposts.push(ubtpost)
   },
 
@@ -52,14 +51,16 @@ const mutations = {
 
   EDIT_UBTPOST: (state, ubtpost) => {
     let elementIndex = state.ubtposts.findIndex(
-      (item) => item.ubtpostId === ubtpost.ubtpostId
+      (element) => element.ubtpostId == ubtpost.ubtpostId
     )
-
+    console.log(elementIndex)
     let newArray = { ...state.ubtposts }
 
     newArray[elementIndex] = ubtpost
 
-    state.ubtposts = newArray
+    console.log(newArray)
+
+    state.ubtposts = { ...newArray }
   },
 }
 

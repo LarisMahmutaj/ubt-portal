@@ -1,5 +1,10 @@
 <template>
-	<v-card class="mx-auto my-5" color="#FCFCFC" max-width="550">
+	<v-card
+		class="mx-auto my-5"
+		color="#FCFCFC"
+		max-width="550"
+		:key="componentKey"
+	>
 		<v-list color="transparent" class="d-flex justify-between py-0">
 			<v-card-text class="body-1 font-weight-bold">
 				{{ ubtpost.author.username }}
@@ -114,14 +119,14 @@
 		</v-list>
 
 		<v-card-text class="body-1 font-weight-medium">
-			<vue-markdown>{{ ubtpost.content }}</vue-markdown>
+			<vue-markdown>{{ newPost.content }}</vue-markdown>
 		</v-card-text>
 
 		<v-card-actions>
 			<v-list-item small class="grow">
 				<v-list-item-content>
 					<v-list-item-title class="caption">
-						{{ moment(ubtpost.date).calendar() }}</v-list-item-title
+						{{ moment(newPost.date).calendar() }}</v-list-item-title
 					>
 				</v-list-item-content>
 
@@ -152,7 +157,8 @@
 			return {
 				editDialog: false,
 				deleteDialog: false,
-				newPost: { ...this.ubtpost }
+				newPost: { ...this.ubtpost },
+				componentKey: 0
 			};
 		},
 		name: "Ubtpost",
@@ -165,15 +171,15 @@
 		},
 		methods: {
 			...mapActions(["deleteUbtpost", "editUbtpost", "fetchUbtposts"]),
-			deletePost() {
+			async deletePost() {
 				this.deleteUbtpost(this.ubtpost.ubtpostId);
 				this.deleteDialog = false;
-				this.$router.go();
+				await this.fetchUbtposts();
 			},
 			async editPost() {
 				await this.editUbtpost(this.newPost);
 				await this.fetchUbtposts();
-				this.$router.go();
+				this.componentKey += 1;
 			}
 		}
 	};

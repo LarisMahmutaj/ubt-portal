@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Ubtpost } from './ubtposts.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, InsertResult } from 'typeorm';
+import { Repository, InsertResult, UpdateResult } from 'typeorm';
 
 @Injectable()
 export class UbtpostsService {

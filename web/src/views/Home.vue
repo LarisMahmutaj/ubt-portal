@@ -50,7 +50,6 @@
 		created() {
 			this.fetchUbtposts();
 		},
-
 		methods: {
 			...mapActions(["fetchUbtposts"])
 		}
