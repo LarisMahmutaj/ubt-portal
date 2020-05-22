@@ -161,7 +161,16 @@
 									>
 									</v-checkbox>
 								</div>
-								<v-btn class="my-2" block color="primary" type="submit"
+								<v-btn
+									v-if="loading"
+									loading
+									class="my-2"
+									block
+									color="primary"
+									type="submit"
+									>Create Your Account</v-btn
+								>
+								<v-btn v-else class="my-2" block color="primary" type="submit"
 									>Create Your Account</v-btn
 								>
 								<p class="typo__p my-1" v-if="submitStatus === 'OK'">
@@ -198,7 +207,8 @@
 					agreeToTerms: null
 				},
 				submitted: false,
-				submitStatus: null
+				submitStatus: null,
+				loading: false
 			};
 		},
 		validations: {
@@ -230,6 +240,7 @@
 			...mapActions(["register"]),
 
 			async onSubmit() {
+				this.loading = true;
 				const { ...newUser } = this.formData;
 				this.submitted = true;
 				this.$v.$touch();
@@ -237,6 +248,7 @@
 					return;
 				} else {
 					await this.register(newUser);
+					this.loading = false;
 					this.submitStatus = "PENDING";
 					setTimeout(() => {
 						this.submitStatus = "OK";

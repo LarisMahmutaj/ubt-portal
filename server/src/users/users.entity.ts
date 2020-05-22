@@ -20,4 +20,7 @@ export class User {
 
   @Column()
   date: Date;
+
+  @Column({ default: false })
+  active: boolean;
 }

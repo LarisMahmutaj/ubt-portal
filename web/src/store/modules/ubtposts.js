@@ -30,7 +30,6 @@ const actions = {
       `http://localhost:3000/ubtposts/${ubtpost.ubtpostId}`,
       ubtpost
     )
-    console.log(ubtpost)
     commit("EDIT_UBTPOST", ubtpost)
   },
 }
@@ -53,12 +52,9 @@ const mutations = {
     let elementIndex = state.ubtposts.findIndex(
       (element) => element.ubtpostId == ubtpost.ubtpostId
     )
-    console.log(elementIndex)
     let newArray = { ...state.ubtposts }
 
     newArray[elementIndex] = ubtpost
-
-    console.log(newArray)
 
     state.ubtposts = { ...newArray }
   },

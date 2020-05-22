@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-app-bar flat class="white">
+		<v-app-bar app class="white" elevate-on-scroll>
 			<div class="d-flex align-center justify-center mx-auto ">
 				<div class="d-flex mr-12  ">
 					<v-icon class="mx-3">mdi-twitter</v-icon>

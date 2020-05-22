@@ -1,5 +1,6 @@
 <template>
 	<v-card
+		v-if="ubtpost.author"
 		class="mx-auto my-5"
 		color="#FCFCFC"
 		max-width="550"
@@ -17,7 +18,7 @@
 						</v-btn>
 					</template>
 					<v-list class="py-0 ma-0">
-						<v-list-item class="px-0  mb-n3">
+						<v-list-item class="px-0 mb-n3">
 							<!-- Edit Modal -->
 							<v-dialog v-model="editDialog" persistent max-width="600px">
 								<template v-slot:activator="{ on }">
@@ -63,10 +64,13 @@
 												>Close</v-btn
 											>
 											<v-btn
+												v-if="loading"
 												color="blue darken-1"
+												loading
 												text
 												type="submit"
-												@click="editDialog = false"
+											></v-btn>
+											<v-btn v-else color="blue darken-1" text type="submit"
 												>Save</v-btn
 											>
 										</v-card-actions>
@@ -80,7 +84,6 @@
 									<v-card-title class="font-weight-bold error--text"
 										>Delete Post?</v-card-title
 									>
-
 									<v-card-text>
 										Are you sure you want to delete this post? Once deleted you
 										cannot bring it back.
@@ -97,7 +100,15 @@
 											No
 										</v-btn>
 
-										<v-btn color="error darken-1" text @click="deletePost">
+										<v-btn v-if="loading" color="error darken-1" loading text>
+											Yes
+										</v-btn>
+										<v-btn
+											v-else
+											color="error darken-1"
+											text
+											@click="deletePost"
+										>
 											Yes
 										</v-btn>
 									</v-card-actions>
@@ -158,7 +169,8 @@
 				editDialog: false,
 				deleteDialog: false,
 				newPost: { ...this.ubtpost },
-				componentKey: 0
+				componentKey: 0,
+				loading: false
 			};
 		},
 		name: "Ubtpost",
@@ -172,14 +184,19 @@
 		methods: {
 			...mapActions(["deleteUbtpost", "editUbtpost", "fetchUbtposts"]),
 			async deletePost() {
+				this.loading = true;
 				this.deleteUbtpost(this.ubtpost.ubtpostId);
-				this.deleteDialog = false;
 				await this.fetchUbtposts();
+				this.loading = false;
+				this.deleteDialog = false;
 			},
 			async editPost() {
+				this.loading = true;
 				await this.editUbtpost(this.newPost);
 				await this.fetchUbtposts();
 				this.componentKey += 1;
+				this.loading = false;
+				this.editDialog = false;
 			}
 		}
 	};

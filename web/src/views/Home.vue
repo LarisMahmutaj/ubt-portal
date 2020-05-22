@@ -55,3 +55,6 @@
 		}
 	};
 </script>
+
+<style scoped>
+</style>

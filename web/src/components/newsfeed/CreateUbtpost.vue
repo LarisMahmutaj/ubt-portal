@@ -36,6 +36,19 @@
 							>
 						</div>
 						<v-btn
+							v-if="loading"
+							type="submit"
+							small
+							depressed
+							loading
+							class="mx-4"
+							rounded
+							dark
+							color="#244082"
+							>Post</v-btn
+						>
+						<v-btn
+							v-else
 							type="submit"
 							small
 							depressed
@@ -64,7 +77,8 @@
 					date: null,
 					authorId: null
 				},
-				showInfo: false
+				showInfo: false,
+				loading: false
 			};
 		},
 		computed: {
@@ -74,19 +88,19 @@
 			...mapActions(["createUbtpost", "fetchUbtposts"]),
 
 			async onSubmit() {
-				// const response = await axios.post(
-				//   "http://localhost:3000/ubtposts",
-				//   this.ubtpost
-				// );
-				// console.log(response.data);
-				var newPost = { ...this.ubtpost };
+				this.loading = true;
+
+				const newPost = { ...this.ubtpost };
 				newPost.date = new Date();
 				newPost.authorId = this.user.userId;
 
 				await this.createUbtpost(newPost);
+
 				this.ubtpost.content = "";
 				this.ubtpost.date = null;
 				await this.fetchUbtposts();
+
+				this.loading = false;
 			}
 		}
 	};
