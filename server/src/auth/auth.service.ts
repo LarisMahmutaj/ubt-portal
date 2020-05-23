@@ -22,7 +22,7 @@ export class AuthService {
         return {
           userId: user.userId,
           email: user.email,
-          username: user.username,
+          username: user.fullname,
           date: user.date,
         };
       }
@@ -38,7 +38,7 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
       userId: user.userId,
       email: user.email,
-      username: user.username,
+      username: user.fullname,
     };
   }
 }

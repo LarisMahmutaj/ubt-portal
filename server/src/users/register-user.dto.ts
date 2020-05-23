@@ -1,5 +1,5 @@
 export class RegisterUserDto {
-  readonly username: string;
+  readonly fullname: string;
   readonly email: string;
   readonly password: string;
   readonly date: Date;

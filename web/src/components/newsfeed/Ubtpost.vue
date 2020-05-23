@@ -8,7 +8,7 @@
 	>
 		<v-list color="transparent" class="d-flex justify-between py-0">
 			<v-card-text class="body-1 font-weight-bold">
-				{{ ubtpost.author.username }}
+				{{ ubtpost.author.fullname }}
 			</v-card-text>
 			<div class="text-center" v-if="ubtpost.authorId === user.userId">
 				<v-menu offset-y>

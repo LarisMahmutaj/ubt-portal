@@ -49,27 +49,27 @@
 									class="py-0"
 									hide-details
 									:class="{
-										'is-invalid': submitted && $v.formData.username.$error
+										'is-invalid': submitted && $v.formData.fullname.$error
 									}"
-									v-model="formData.username"
-									label="Username"
+									v-model="formData.fullname"
+									label="Fullname"
 								>
 								</v-text-field>
 								<div
-									v-if="submitted && $v.formData.username.$error"
+									v-if="submitted && $v.formData.fullname.$error"
 									class="invalid-feedback"
 								>
 									<v-input
 										error
-										v-if="submitted && !$v.formData.username.required"
+										v-if="submitted && !$v.formData.fullname.required"
 										class="invalid-feedback"
-										:error-messages="['Username is required']"
+										:error-messages="['Name is required']"
 									></v-input>
 									<v-input
-										v-if="submitted && !$v.formData.username.maxLength"
+										v-if="submitted && !$v.formData.fullname.maxLength"
 										class="invalid-feedback"
 										:error-messages="[
-											'Username must be shorter than 30 characters'
+											'Name must be shorter than 30 characters'
 										]"
 									></v-input>
 								</div>
@@ -200,7 +200,7 @@
 		data() {
 			return {
 				formData: {
-					username: "",
+					fullname: "",
 					email: "",
 					password: "",
 					passwordConfirm: "",
@@ -213,7 +213,7 @@
 		},
 		validations: {
 			formData: {
-				username: {
+				fullname: {
 					required,
 					maxLength: maxLength(30)
 				},

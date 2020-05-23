@@ -16,7 +16,7 @@ export class UsersService {
     const user = await this.users
       .createQueryBuilder('user')
       .select('user.userId')
-      .addSelect('user.username')
+      .addSelect('user.fullname')
       .addSelect('user.email')
       .addSelect('user.date')
       .addSelect('user.password')
