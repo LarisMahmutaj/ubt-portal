@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/users.entity';
@@ -22,7 +26,7 @@ export class AuthService {
         return {
           userId: user.userId,
           email: user.email,
-          username: user.fullname,
+          fullname: user.fullname,
           date: user.date,
         };
       }
@@ -34,11 +38,19 @@ export class AuthService {
   async login(user: User) {
     const payload = { email: user.email, sub: user.userId };
 
-    return {
-      access_token: this.jwtService.sign(payload),
-      userId: user.userId,
-      email: user.email,
-      username: user.fullname,
-    };
+    const u = await this.usersService.findById(user.userId);
+
+    if (u.active === false) {
+      throw new UnauthorizedException({
+        description: 'Please confirm your email to login',
+      });
+    } else {
+      return {
+        access_token: this.jwtService.sign(payload),
+        userId: user.userId,
+        email: user.email,
+        fullname: user.fullname,
+      };
+    }
   }
 }

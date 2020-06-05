@@ -2,7 +2,7 @@
 	<div class="my-4 d-flex ml-5">
 		<v-card width="260">
 			<v-card-title>Events</v-card-title>
-			<v-card-text>Hi {{ user.username }} </v-card-text>
+			<v-card-text>Hi {{ user.fullname }} </v-card-text>
 		</v-card>
 	</div>
 </template>

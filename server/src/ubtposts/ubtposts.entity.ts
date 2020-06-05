@@ -6,7 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { User } from 'src/users/users.entity';
-import { Course } from 'src/courses/courses.entity'
+import { Course } from 'src/courses/courses.entity';
 
 @Entity()
 export class Ubtpost {
@@ -32,12 +32,12 @@ export class Ubtpost {
   @JoinColumn({ name: 'authorId' })
   author: User;
 
-  @Column()
+  @Column({ nullable: true })
   courseId: string;
 
   @ManyToOne((type) => Course, {
     nullable: true,
   })
-  @JoinColumn({ name: "courseId" })
+  @JoinColumn({ name: 'courseId' })
   course: Course;
 }

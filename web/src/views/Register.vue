@@ -173,10 +173,6 @@
 								<v-btn v-else class="my-2" block color="primary" type="submit"
 									>Create Your Account</v-btn
 								>
-								<p class="typo__p my-1" v-if="submitStatus === 'OK'">
-									Thanks for your Registration! <br />
-									You will be redirected to Login
-								</p>
 							</v-form>
 						</v-container>
 					</div>
@@ -207,7 +203,6 @@
 					agreeToTerms: null
 				},
 				submitted: false,
-				submitStatus: null,
 				loading: false
 			};
 		},
@@ -249,11 +244,7 @@
 				} else {
 					await this.register(newUser);
 					this.loading = false;
-					this.submitStatus = "PENDING";
-					setTimeout(() => {
-						this.submitStatus = "OK";
-					}, 100);
-					setTimeout(() => this.$router.push({ path: "/" }), 1500);
+					this.$router.push({ name: "login" });
 				}
 			}
 		}

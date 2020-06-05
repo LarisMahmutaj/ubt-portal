@@ -1,7 +1,10 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Redirect } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { RegisterUserDto } from './register-user.dto';
 import { User } from './users.entity';
+
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Controller('users')
 export class UsersController {
@@ -11,5 +14,11 @@ export class UsersController {
   register(@Body() registerUserDto: RegisterUserDto): Promise<User> {
     const newUser = new User(registerUserDto);
     return this.usersService.create(newUser);
+  }
+
+  @Get('confirmation/:token')
+  @Redirect('http://localhost:8080')
+  confirmation(@Param('token') token) {
+    this.usersService.confirmation(token);
   }
 }
