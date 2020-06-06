@@ -47,9 +47,8 @@
 			...mapActions(["logout", "fetchUbtposts"]),
 
 			async onLogout() {
-				await this.logout().then(() => {
-					this.$router.push("/");
-				});
+				await this.logout();
+				this.$router.push("/");
 			},
 
 			async refresh() {

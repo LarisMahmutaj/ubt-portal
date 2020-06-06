@@ -17,7 +17,7 @@ export class UsersController {
   }
 
   @Get('confirmation/:token')
-  @Redirect('http://localhost:8080')
+  @Redirect('http://localhost:8080/email-confirmed')
   confirmation(@Param('token') token) {
     this.usersService.confirmation(token);
   }

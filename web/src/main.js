@@ -22,9 +22,19 @@ if (access_token) {
 }
 
 Vue.use(moment)
+
 Vue.config.productionTip = false
+/*eslint-disable*/
+Vue.config.errorHandler = function(err, vm, info) {
+  if (err.response.status === 401) {
+    store.dispatch("logout")
+    router.push("/")
+  }
+}
+
 Vue.use(VueRouter)
 const router = new VueRouter({
+  mode: "history",
   routes,
 })
 

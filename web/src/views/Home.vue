@@ -47,11 +47,20 @@
 			CreateUbtpost: CreateUbtpost,
 			Events: Events
 		},
-		created() {
-			this.fetchUbtposts();
+		async created() {
+			try {
+				await this.fetchUbtposts();
+			} catch (error) {
+				if (error.response.status === 401) {
+					this.logout();
+					this.$router.push("/");
+				} else {
+					console.log(error.response.message);
+				}
+			}
 		},
 		methods: {
-			...mapActions(["fetchUbtposts"])
+			...mapActions(["fetchUbtposts", "logout"])
 		}
 	};
 </script>

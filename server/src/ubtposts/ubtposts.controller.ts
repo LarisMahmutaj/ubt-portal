@@ -14,6 +14,7 @@ import { Ubtpost } from './ubtposts.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateResult, DeleteResult, InsertResult } from 'typeorm';
 
+@UseGuards(JwtAuthGuard)
 @Controller('ubtposts')
 export class UbtpostsController {
   constructor(private readonly ubtpostsService: UbtpostsService) {}

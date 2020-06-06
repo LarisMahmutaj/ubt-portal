@@ -107,7 +107,7 @@
 											v-else
 											color="error darken-1"
 											text
-											@click="deletePost"
+											@click.prevent="deletePost"
 										>
 											Yes
 										</v-btn>
@@ -185,7 +185,7 @@
 			...mapActions(["deleteUbtpost", "editUbtpost", "fetchUbtposts"]),
 			async deletePost() {
 				this.loading = true;
-				this.deleteUbtpost(this.ubtpost.ubtpostId);
+				await this.deleteUbtpost(this.ubtpost.ubtpostId);
 				await this.fetchUbtposts();
 				this.loading = false;
 				this.deleteDialog = false;
