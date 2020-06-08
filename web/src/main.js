@@ -28,7 +28,9 @@ Vue.config.productionTip = false
 Vue.config.errorHandler = function(err, vm, info) {
   if (err.response.status === 401) {
     store.dispatch("logout")
+    store.dispatch('setError', "Your session has most likely timed out.")
     router.push("/")
+    
   }
 }
 

@@ -3,11 +3,13 @@ import axios from "axios"
 const state = {
   user: null,
   loggedIn: false,
+  error: ""
 }
 
 const getters = {
   loggedIn: (state) => state.loggedIn,
   user: (state) => state.user,
+  error: (state) => state.error
 }
 
 const actions = {
@@ -31,6 +33,10 @@ const actions = {
       resolve()
     })
   },
+
+  async setError({ commit }, error){
+    commit('SET_ERROR', error)
+  }
 }
 
 const mutations = {
@@ -46,6 +52,9 @@ const mutations = {
     state.user = null
     state.loggedIn = false
   },
+  SET_ERROR: (state, error) =>{
+    state.error = error;
+  }
 }
 
 export default {

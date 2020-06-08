@@ -232,7 +232,7 @@
 		},
 		methods: {
 			/*eslint-disable*/
-			...mapActions(["register"]),
+			...mapActions(["register", 'setError']),
 
 			async onSubmit() {
 				this.loading = true;
@@ -243,8 +243,9 @@
 					return;
 				} else {
 					await this.register(newUser);
-					this.loading = false;
-					this.$router.push({ name: "login" });
+					this.loading = false;				
+					this.setError("Please confirm your email to login.")
+					this.$router.push({ name: "login"});
 				}
 			}
 		}
