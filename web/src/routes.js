@@ -2,6 +2,7 @@ import Home from './views/Home.vue';
 import Register from './views/Register.vue';
 import Login from './views/Login.vue';
 import EmailConfirmed from './views/EmailConfirmed.vue';
+import Courses from './components/Courses.vue';
 
 export const routes = [
   {
@@ -19,4 +20,5 @@ export const routes = [
     name: 'emailConfirmed',
     component: EmailConfirmed,
   },
+  { path: '/courses', name: 'courses', component: Courses },
 ];

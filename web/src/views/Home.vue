@@ -12,6 +12,15 @@
         <v-btn text rounded class="justify-start font-size-15 mb-4">
           <v-icon class="mx-3">mdi-message-outline</v-icon>Messages</v-btn
         >
+
+        <v-btn
+          text
+          rounded
+          class="justify-start font-size-15 mb-4 mx-12"
+          @click="courses"
+        >
+          Courses</v-btn
+        >
       </div>
       <div>
         <CreateUbtpost />
@@ -52,6 +61,10 @@ export default {
   },
   methods: {
     ...mapActions(['fetchUbtposts', 'logout']),
+
+    async courses() {
+      this.$router.push({ name: 'courses' });
+    },
   },
 };
 </script>
