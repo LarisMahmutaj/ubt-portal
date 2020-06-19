@@ -37,7 +37,7 @@ export default {
     return {
       courses: [
         {
-          name: 'Lab Kurs',
+          name: 'Lab Kursi',
         },
         {
           name: 'Zhvillimi Dhe Dizajnimi i Uebit',
