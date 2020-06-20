@@ -8,5 +8,6 @@ import { Ubtpost } from './ubtposts.entity';
   imports: [TypeOrmModule.forFeature([Ubtpost])],
   controllers: [UbtpostsController],
   providers: [UbtpostsService],
+  exports: [UbtpostsService]
 })
 export class UbtpostsModule {}

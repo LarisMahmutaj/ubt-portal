@@ -1,13 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { Course, Privacy } from './courses.entity';
+import { Injectable, ForbiddenException } from '@nestjs/common';
+import {
+  Course,
+  Privacy,
+  CourseUser,
+  CoursePermission,
+} from './courses.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, InsertResult, UpdateResult } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class CoursesService {
-  constructor(@InjectRepository(Course) private courses: Repository<Course>) {}
+  constructor(
+    @InjectRepository(Course) private courses: Repository<Course>,
+    @InjectRepository(CourseUser) private courseUsers: Repository<CourseUser>,
+  ) {}
 
-  async findAll(): Promise<Course[]> {
+  async findAll() {
     return await this.courses.find({
       order: {
         name: 'ASC',
@@ -16,12 +25,15 @@ export class CoursesService {
     });
   }
 
-  async findOneById(courseId: string): Promise<Course> {
-    return await this.courses.findOne({ courseId });
+  async findOneById(courseId: string) {
+    return await this.courses.findOne(
+      { courseId: courseId },
+      { relations: ['owner'] },
+    );
   }
 
-  async create(course: Course): Promise<InsertResult> {
-    return await this.courses.insert({
+  async create(course: Course) {
+    await this.courses.insert({
       name: course.name,
       description: course.description,
       date: course.date,
@@ -31,11 +43,11 @@ export class CoursesService {
   }
 
   async delete(id: string) {
-    return await this.courses.delete(id);
+    await this.courses.delete(id);
   }
 
   async update(courseId: string, course: Course) {
-    return await this.courses.update(
+    await this.courses.update(
       { courseId },
       {
         description: course.description,
@@ -43,5 +55,26 @@ export class CoursesService {
         privacy: course.privacy,
       },
     );
+  }
+
+  async createCourseUser(courseId: string, userId: string) {
+    var courseUser = new CourseUser({
+      courseId: courseId,
+      userId: userId,
+      coursePermission: CoursePermission.WRITE,
+      role: 'Member',
+    });
+
+    await this.courseUsers.insert(courseUser);
+    return courseUser;
+  }
+
+  async checkPermission(courseId: string, userId: string) {
+    const courseUser = await this.courseUsers.findOne({ courseId, userId });
+    if (!courseUser) {
+      throw new ForbiddenException();
+    } else {
+      return courseUser.coursePermission;
+    }
   }
 }

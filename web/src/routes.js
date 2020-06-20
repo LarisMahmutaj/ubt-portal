@@ -3,7 +3,7 @@ import Register from './views/Register.vue';
 import Login from './views/Login.vue';
 import EmailConfirmed from './views/EmailConfirmed.vue';
 import Courses from './components/Courses.vue';
-import CoursesView from './views/CoursesView.vue';
+import CourseView from './views/CourseView.vue';
 
 export const routes = [
   {
@@ -22,5 +22,5 @@ export const routes = [
     component: EmailConfirmed,
   },
   { path: '/courses', name: 'courses', component: Courses },
-  { path: '/viewcourse', name: 'viewcourse', component: CoursesView },
+  { path: '/course', name: 'course', component: CourseView },
 ];

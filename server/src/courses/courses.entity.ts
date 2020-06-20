@@ -1,13 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  PrimaryColumn,
+} from 'typeorm';
 import { User } from 'src/users/users.entity';
 
 export enum Privacy {
-  PRIVATE = "private",
-  PUBLIC = "public"
+  PRIVATE = 'private',
+  PUBLIC = 'public',
+}
+
+export enum CoursePermission {
+  NONE = 'none',
+  READ = 'read',
+  WRITE = 'write',
 }
 
 @Entity()
-export class Course{
+export class Course {
   constructor(values: Partial<Course> = {}) {
     Object.assign(this, values);
   }
@@ -27,16 +40,55 @@ export class Course{
   @Column()
   ownerId: string;
 
-  @Column({
-    type: 'enum',
-    enum: Privacy,
-    default: Privacy.PRIVATE
-  })
-  privacy: Privacy
-
   @ManyToOne((type) => User, {
     nullable: false,
   })
-  @JoinColumn({name: 'ownerId'})
+  @JoinColumn({ name: 'ownerId' })
   owner: User;
+
+  @Column({
+    type: 'enum',
+    enum: Privacy,
+    default: Privacy.PRIVATE,
+  })
+  privacy: Privacy;
+}
+
+@Entity()
+export class CourseUser {
+  constructor(values: Partial<CourseUser> = {}) {
+    Object.assign(this, values);
+  }
+
+  @PrimaryColumn()
+  userId: string;
+
+  @ManyToOne((type) => User, {
+    primary: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'userId' })
+  user: User;
+
+  @PrimaryColumn()
+  courseId: string;
+
+  @ManyToOne((type) => Course, {
+    primary: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'courseId' })
+  course: Course;
+
+  @Column({
+    type: 'enum',
+    enum: CoursePermission,
+    default: CoursePermission.NONE,
+  })
+  coursePermission: CoursePermission;
+
+  @Column()
+  role: string;
 }

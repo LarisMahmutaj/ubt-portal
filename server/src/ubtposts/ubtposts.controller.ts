@@ -20,8 +20,8 @@ export class UbtpostsController {
   constructor(private readonly ubtpostsService: UbtpostsService) {}
 
   @Get()
-  findAll(): Promise<Ubtpost[]> {
-    return this.ubtpostsService.findAll();
+  async findAll(): Promise<Ubtpost[]> {
+    return await this.ubtpostsService.findAll();
   }
 
   @Get(':id')
@@ -30,21 +30,24 @@ export class UbtpostsController {
   }
 
   @Post()
-  create(@Body() createUbtpostDto: CreateUbtpostDto): Promise<InsertResult> {
+  async create(@Body() createUbtpostDto: CreateUbtpostDto): Promise<Ubtpost> {
     const newPost = new Ubtpost(createUbtpostDto);
     const { authorId } = createUbtpostDto;
 
     newPost.authorId = authorId;
-    return this.ubtpostsService.create(newPost);
+    await this.ubtpostsService.create(newPost);
+    
+    return newPost;
   }
 
   @Put(':id')
-  update(
+  async update(
     @Body() updateUbtpostDto: CreateUbtpostDto,
-    @Param('id') id,
-  ): Promise<UpdateResult> {
+    @Param('id') ubtpostId,
+  ): Promise<Ubtpost> {
     const updatedPost = new Ubtpost(updateUbtpostDto);
-    return this.ubtpostsService.update(id, updatedPost.content);
+    await this.ubtpostsService.update(ubtpostId, updatedPost.content);
+    return {ubtpostId , ...updatedPost};
   }
 
   @Delete(':id')

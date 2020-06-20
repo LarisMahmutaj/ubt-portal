@@ -9,8 +9,11 @@ export class UbtpostsService {
     @InjectRepository(Ubtpost) private ubtposts: Repository<Ubtpost>,
   ) {}
 
-  async findAll(): Promise<Ubtpost[]> {
+  async findAll() {
     return await this.ubtposts.find({
+      where: {
+        courseId: null
+      },
       order: {
         date: 'DESC',
       },
@@ -18,15 +21,16 @@ export class UbtpostsService {
     });
   }
 
-  async findOne(ubtpostId: string): Promise<Ubtpost> {
+  async findOne(ubtpostId: string) {
     return await this.ubtposts.findOne({ ubtpostId });
   }
 
-  async create(ubtpost: Ubtpost): Promise<InsertResult> {
+  async create(ubtpost: Ubtpost) {
     return await this.ubtposts.insert({
       content: ubtpost.content,
       date: ubtpost.date,
       authorId: ubtpost.authorId,
+      courseId: ubtpost.courseId
     });
   }
 
@@ -36,5 +40,9 @@ export class UbtpostsService {
 
   async update(ubtpostId: string, content: string) {
     return await this.ubtposts.update({ ubtpostId }, { content });
+  }
+
+  async getCoursePosts(courseId: string){
+    return await this.ubtposts.find({ where: { courseId } })
   }
 }

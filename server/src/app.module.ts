@@ -9,8 +9,6 @@ import { UsersModule } from './users/users.module';
 import { CoursesModule } from './courses/courses.module';
 
 import * as dotenv from 'dotenv';
-import { UbtpostsService } from './ubtposts/ubtposts.service';
-
 dotenv.config();
 
 @Module({

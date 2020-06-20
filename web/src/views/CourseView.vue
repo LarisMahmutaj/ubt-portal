@@ -32,7 +32,7 @@
       </div>
       <div class="d-flex justify-center flex-column">
         <!-- tash ktu vjen ajo psh {{courses.name}} -->
-        <h3 class="mt-2">Lab Course 2</h3>
+        <h3 class="mt-2">{{ currentCourse.name }}</h3>
 
         <img
           src="../assets/images/coursescover.png"
@@ -41,7 +41,7 @@
         />
 
         <CreateUbtpost />
-        <div v-for="u in allUbtposts" :key="u.ubtpostId">
+        <div v-for="u in coursePosts" :key="u.ubtpostId">
           <Ubtpost :ubtpost="u" />
         </div>
       </div>
@@ -87,20 +87,24 @@ export default {
   data() {
     return {};
   },
-  name: 'Home',
+  name: 'CourseView',
   computed: {
-    ...mapGetters(['allUbtposts', 'loggedIn']),
+    ...mapGetters(['loggedIn', 'currentCourse', 'coursePosts', 'user']),
   },
   components: {
     AppBar: AppBar,
     Ubtpost: Ubtpost,
     CreateUbtpost: CreateUbtpost,
   },
-  beforeMount() {
-    this.fetchUbtposts();
+  async beforeMount() {
+    const token = this.user.access_token;
+    await this.fetchCoursePosts({
+      courseId: this.currentCourse.courseId,
+      token,
+    });
   },
   methods: {
-    ...mapActions(['fetchUbtposts', 'logout']),
+    ...mapActions(['fetchCoursePosts', 'logout', 'setCurrentCourse']),
 
     async courses() {
       this.$router.push({ name: 'courses' });
