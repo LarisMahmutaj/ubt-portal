@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import AppBar from './layout/AppBar.vue';
+import AppBar from '../../components/layout/AppBar.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -49,8 +49,7 @@ export default {
   methods: {
     ...mapActions(['fetchCourses', 'setCurrentCourse', 'fetchCoursePosts']),
     async setCurrent(courseId) {
-      await this.setCurrentCourse(courseId);
-      this.$router.push('/course');
+      this.$router.push({ name: 'course', params: { courseId } });
     },
   },
 };

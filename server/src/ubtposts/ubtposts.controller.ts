@@ -36,18 +36,18 @@ export class UbtpostsController {
 
     newPost.authorId = authorId;
     await this.ubtpostsService.create(newPost);
-    
+
     return newPost;
   }
 
   @Put(':id')
   async update(
     @Body() updateUbtpostDto: CreateUbtpostDto,
-    @Param('id') ubtpostId,
+    @Param('id') postId,
   ): Promise<Ubtpost> {
     const updatedPost = new Ubtpost(updateUbtpostDto);
-    await this.ubtpostsService.update(ubtpostId, updatedPost.content);
-    return {ubtpostId , ...updatedPost};
+    await this.ubtpostsService.update(postId, updatedPost.content);
+    return { postId, ...updatedPost };
   }
 
   @Delete(':id')

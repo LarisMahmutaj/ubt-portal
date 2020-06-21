@@ -16,15 +16,14 @@
         <v-btn
           text
           rounded
-          class="justify-start font-size-15 mb-4 mx-12"
+          class="justify-start font-size-15 mb-4"
           @click="courses"
-        >
-          Courses</v-btn
+          ><v-icon class="mx-3">mdi-account-group</v-icon> Courses</v-btn
         >
       </div>
       <div>
-        <CreateUbtpost />
-        <div v-for="u in allUbtposts" :key="u.ubtpostId">
+        <CreateUbtpost :courseId="null" />
+        <div v-for="u in allUbtposts" :key="u.postId">
           <Ubtpost :ubtpost="u" />
         </div>
       </div>
@@ -60,7 +59,7 @@ export default {
     this.fetchUbtposts();
   },
   methods: {
-    ...mapActions(['fetchUbtposts', 'logout']),
+    ...mapActions(['fetchUbtposts', 'fetchCoursePosts', 'logout']),
 
     async courses() {
       this.$router.push({ name: 'courses' });

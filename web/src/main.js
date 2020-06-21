@@ -31,6 +31,10 @@ Vue.config.errorHandler = function(err, vm, info) {
     store.dispatch('setError', 'Your session has most likely timed out.');
     router.push('/');
   }
+
+  if (err.response.status === 403) {
+    router.push('/home');
+  }
 };
 
 Vue.use(VueRouter);

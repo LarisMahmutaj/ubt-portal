@@ -2,21 +2,23 @@ import {
   Controller,
   Get,
   Post,
-  Put,
   Delete,
   Param,
   Body,
   Patch,
   Request,
   ForbiddenException,
+  UseGuards,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { Course, CourseUser, CoursePermission } from './courses.entity';
-import { CreateCourseDto } from './courses.dto';
+import { CreateCourseDto, CreateCoursePostDto } from './courses.dto';
 import { UbtpostsService } from 'src/ubtposts/ubtposts.service';
-import { Ubtpost } from 'src/ubtposts/ubtposts.entity';
+import { Ubtpost, CoursePost } from 'src/ubtposts/ubtposts.entity';
 import { JwtService } from '@nestjs/jwt';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('courses')
 export class CoursesController {
   constructor(
@@ -63,30 +65,6 @@ export class CoursesController {
     return { ...courseId };
   }
 
-  @Post(':courseId/ubtposts')
-  async getCoursePosts(
-    @Param('courseId') courseId,
-    @Body() req,
-  ): Promise<Ubtpost[]> {
-    try {
-      const user = this.jwtService.verify(req.token);
-      const permission = await this.coursesService.checkPermission(
-        courseId,
-        user.userId,
-      );
-      if (
-        permission === CoursePermission.READ ||
-        permission === CoursePermission.WRITE
-      ) {
-        return await this.ubtpostsService.getCoursePosts(courseId);
-      } else {
-        throw new ForbiddenException();
-      }
-    } catch (error) {
-      throw new ForbiddenException();
-    }
-  }
-
   @Post(':courseId/join')
   async joinCourse(
     @Param('courseId') courseId: string,
@@ -94,5 +72,111 @@ export class CoursesController {
   ): Promise<CourseUser> {
     const user = this.jwtService.verify(req.token);
     return await this.coursesService.createCourseUser(courseId, user.userId);
+  }
+
+  // CoursePosts
+  @Get(':courseId/posts')
+  async getCoursePosts(
+    @Param('courseId') courseId,
+    @Request() req,
+  ): Promise<Ubtpost[]> {
+    const permission = await this.coursesService.checkPermission(
+      courseId,
+      req.user.sub,
+    );
+    if (
+      permission === CoursePermission.READ ||
+      permission === CoursePermission.WRITE
+    ) {
+      return await this.coursesService.getCoursePosts(courseId);
+    } else {
+      throw new ForbiddenException({
+        status: 403,
+        error: 'You dont have permission to view posts in this course',
+      });
+    }
+  }
+
+  @Post(':courseId/posts')
+  async createCoursePost(
+    @Param('courseId') courseId,
+    @Request() req,
+    @Body() createCoursePostDto: CreateCoursePostDto,
+  ): Promise<CoursePost> {
+    const permission = await this.coursesService.checkPermission(
+      courseId,
+      req.user.sub,
+    );
+
+    if (permission === CoursePermission.WRITE) {
+      const coursePost = new CoursePost(createCoursePostDto);
+      coursePost.courseId = courseId;
+      coursePost.authorId = req.user.sub;
+      await this.coursesService.createCoursePost(coursePost);
+      return await coursePost;
+    } else {
+      throw new ForbiddenException({
+        status: 403,
+        error: 'You dont have permission to post in this course',
+      });
+    }
+  }
+
+  @Patch(':courseId/posts/:postId')
+  async updateCoursePost(
+    @Param('courseId') courseId,
+    @Param('postId') postId,
+    @Request() req,
+    @Body() updateCoursePostDto: CreateCoursePostDto,
+  ): Promise<CoursePost> {
+    if (req.user.sub !== updateCoursePostDto.authorId) {
+      throw new ForbiddenException({
+        status: 403,
+        error: 'You dont have permission to edit this post',
+      });
+    }
+    const permission = await this.coursesService.checkPermission(
+      courseId,
+      req.user.sub,
+    );
+    if (permission === CoursePermission.WRITE) {
+      const editedPost = new CoursePost(updateCoursePostDto);
+      await this.coursesService.updateCoursePost(postId, editedPost);
+      return editedPost;
+    } else {
+      throw new ForbiddenException({
+        status: 403,
+        error: 'You dont have permission to write in this course',
+      });
+    }
+  }
+
+  @Delete(':courseId/posts/:postId')
+  async deleteCoursePost(
+    @Param('courseId') courseId,
+    @Param('postId') postId,
+    @Request() req,
+  ): Promise<CoursePost> {
+    const post = await this.coursesService.findOneCoursePost(postId);
+    if (req.user.sub !== post.authorId) {
+      throw new ForbiddenException({
+        status: 403,
+        error: 'You dont have permission to edit this post',
+      });
+    }
+    const permission = await this.coursesService.checkPermission(
+      courseId,
+      req.user.sub,
+    );
+
+    if (permission === CoursePermission.WRITE) {
+      await this.coursesService.deleteCoursePost(postId);
+      return post;
+    } else {
+      throw new ForbiddenException({
+        status: 403,
+        error: 'You dont have permission to write in this course',
+      });
+    }
   }
 }

@@ -85,20 +85,41 @@ export default {
     ...mapGetters(['user']),
   },
   methods: {
-    ...mapActions(['createUbtpost', 'fetchUbtposts']),
+    ...mapActions([
+      'createUbtpost',
+      'createCoursePost',
+      'fetchUbtposts',
+      'fetchCoursePosts',
+    ]),
 
     async onSubmit() {
       this.loading = true;
 
-      const newPost = { ...this.ubtpost };
-      newPost.date = new Date();
-      newPost.authorId = this.user.userId;
+      if (this.$route.params.courseId) {
+        const courseId = this.$route.params.courseId;
+        let newPost = { ...this.ubtpost };
 
-      await this.createUbtpost(newPost);
+        newPost.date = new Date();
+        newPost.authorId = this.user.userId;
+        newPost.courseId = courseId;
 
-      this.ubtpost.content = '';
-      this.ubtpost.date = null;
-      await this.fetchUbtposts();
+        await this.createCoursePost({ courseId, newPost });
+        await this.fetchCoursePosts(courseId);
+        this.ubtpost.content = '';
+        this.ubtpost.date = null;
+      } else {
+        let newPost = { ...this.ubtpost };
+
+        newPost.date = new Date();
+        newPost.authorId = this.user.userId;
+        newPost.courseId = this.courseId;
+
+        this.ubtpost.content = '';
+        this.ubtpost.date = null;
+
+        await this.createUbtpost(newPost);
+        await this.fetchUbtposts();
+      }
 
       this.loading = false;
     },

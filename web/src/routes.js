@@ -2,8 +2,8 @@ import Home from './views/Home.vue';
 import Register from './views/Register.vue';
 import Login from './views/Login.vue';
 import EmailConfirmed from './views/EmailConfirmed.vue';
-import Courses from './components/Courses.vue';
-import CourseView from './views/CourseView.vue';
+import Courses from './views/courses/Courses.vue';
+import Course from './views/courses/Course.vue';
 
 export const routes = [
   {
@@ -22,5 +22,10 @@ export const routes = [
     component: EmailConfirmed,
   },
   { path: '/courses', name: 'courses', component: Courses },
-  { path: '/course', name: 'course', component: CourseView },
+  {
+    path: '/course/:courseId',
+    name: 'course',
+    component: Course,
+    params: true,
+  },
 ];

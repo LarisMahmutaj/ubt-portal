@@ -31,17 +31,16 @@
         >
       </div>
       <div class="d-flex justify-center flex-column">
-        <!-- tash ktu vjen ajo psh {{courses.name}} -->
         <h3 class="mt-2">{{ currentCourse.name }}</h3>
 
         <img
-          src="../assets/images/coursescover.png"
+          src="../../assets/images/coursescover.png"
           alt=""
           style="width:550px;heigth:180px;border-radius:5px;"
         />
 
-        <CreateUbtpost />
-        <div v-for="u in coursePosts" :key="u.ubtpostId">
+        <CreateUbtpost :courseId="currentCourse.courseId" />
+        <div v-for="u in allCoursePosts" :key="u.postId">
           <Ubtpost :ubtpost="u" />
         </div>
       </div>
@@ -78,18 +77,23 @@
 <script>
 // @ is an alias to /src
 import { mapGetters, mapActions } from 'vuex';
-import AppBar from '../components/layout/AppBar';
-import Ubtpost from '../components/newsfeed/Ubtpost';
-import CreateUbtpost from '../components/newsfeed/CreateUbtpost';
+import AppBar from '../../components/layout/AppBar';
+import Ubtpost from '../../components/newsfeed/Ubtpost';
+import CreateUbtpost from '../../components/newsfeed/CreateUbtpost';
 
-//
 export default {
   data() {
     return {};
   },
-  name: 'CourseView',
+  name: 'Course',
   computed: {
-    ...mapGetters(['loggedIn', 'currentCourse', 'coursePosts', 'user']),
+    ...mapGetters([
+      'allCoursePosts',
+      'loggedIn',
+      'currentCourse',
+      'user',
+      'allUbtposts',
+    ]),
   },
   components: {
     AppBar: AppBar,
@@ -97,14 +101,15 @@ export default {
     CreateUbtpost: CreateUbtpost,
   },
   async beforeMount() {
-    const token = this.user.access_token;
-    await this.fetchCoursePosts({
-      courseId: this.currentCourse.courseId,
-      token,
-    });
+    await this.fetchCoursePosts(this.$route.params.courseId);
   },
   methods: {
-    ...mapActions(['fetchCoursePosts', 'logout', 'setCurrentCourse']),
+    ...mapActions([
+      'fetchUbtposts',
+      'fetchCoursePosts',
+      'logout',
+      'setCurrentCourse',
+    ]),
 
     async courses() {
       this.$router.push({ name: 'courses' });

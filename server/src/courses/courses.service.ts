@@ -8,16 +8,38 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, InsertResult, UpdateResult } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { CoursePost } from 'src/ubtposts/ubtposts.entity';
 
 @Injectable()
 export class CoursesService {
   constructor(
     @InjectRepository(Course) private courses: Repository<Course>,
     @InjectRepository(CourseUser) private courseUsers: Repository<CourseUser>,
+    @InjectRepository(CoursePost) private coursePosts: Repository<CoursePost>,
   ) {}
+
+  async checkPermission(courseId: string, userId: string) {
+    const courseUser = await this.courseUsers.findOne({ courseId, userId });
+    const course = await this.findOneById(courseId);
+    if (!courseUser) {
+      if (course.privacy === Privacy.PUBLIC) {
+        return await CoursePermission.READ;
+      } else {
+        throw new ForbiddenException({
+          status: 403,
+          error: 'You dont have permission to view this course',
+        });
+      }
+    } else {
+      return courseUser.coursePermission;
+    }
+  }
 
   async findAll() {
     return await this.courses.find({
+      where: {
+        privacy: Privacy.PUBLIC,
+      },
       order: {
         name: 'ASC',
       },
@@ -69,12 +91,33 @@ export class CoursesService {
     return courseUser;
   }
 
-  async checkPermission(courseId: string, userId: string) {
-    const courseUser = await this.courseUsers.findOne({ courseId, userId });
-    if (!courseUser) {
-      throw new ForbiddenException();
-    } else {
-      return courseUser.coursePermission;
-    }
+  //Course Posts
+  async getCoursePosts(courseId: string) {
+    return await this.coursePosts.find({
+      where: { courseId },
+      relations: ['author'],
+      order: {
+        date: 'DESC',
+      },
+    });
+  }
+
+  async findOneCoursePost(postId: string) {
+    return await this.coursePosts.findOne({ postId });
+  }
+
+  async createCoursePost(coursePost: CoursePost) {
+    return await this.coursePosts.insert(coursePost);
+  }
+
+  async updateCoursePost(postId: string, coursePost: CoursePost) {
+    return await this.coursePosts.update(
+      { postId },
+      { content: coursePost.content },
+    );
+  }
+
+  async deleteCoursePost(postId: string) {
+    await this.coursePosts.delete({ postId });
   }
 }

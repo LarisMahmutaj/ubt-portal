@@ -7,6 +7,8 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { User } from 'src/users/users.entity';
+// import { Post } from '../ubtposts/ubtposts.entity';
+const Post = require('../ubtposts/ubtposts.entity');
 
 export enum Privacy {
   PRIVATE = 'private',

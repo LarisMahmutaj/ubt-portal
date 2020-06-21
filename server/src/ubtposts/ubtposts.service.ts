@@ -12,7 +12,7 @@ export class UbtpostsService {
   async findAll() {
     return await this.ubtposts.find({
       where: {
-        courseId: null
+        courseId: null,
       },
       order: {
         date: 'DESC',
@@ -21,8 +21,8 @@ export class UbtpostsService {
     });
   }
 
-  async findOne(ubtpostId: string) {
-    return await this.ubtposts.findOne({ ubtpostId });
+  async findOne(postId: string) {
+    return await this.ubtposts.findOne({ postId });
   }
 
   async create(ubtpost: Ubtpost) {
@@ -30,7 +30,6 @@ export class UbtpostsService {
       content: ubtpost.content,
       date: ubtpost.date,
       authorId: ubtpost.authorId,
-      courseId: ubtpost.courseId
     });
   }
 
@@ -38,11 +37,7 @@ export class UbtpostsService {
     return await this.ubtposts.delete(id);
   }
 
-  async update(ubtpostId: string, content: string) {
-    return await this.ubtposts.update({ ubtpostId }, { content });
-  }
-
-  async getCoursePosts(courseId: string){
-    return await this.ubtposts.find({ where: { courseId } })
+  async update(postId: string, content: string) {
+    return await this.ubtposts.update({ postId }, { content });
   }
 }

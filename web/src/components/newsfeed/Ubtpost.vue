@@ -182,18 +182,38 @@ export default {
     ...mapGetters(['user']),
   },
   methods: {
-    ...mapActions(['deleteUbtpost', 'editUbtpost', 'fetchUbtposts']),
+    ...mapActions([
+      'deleteUbtpost',
+      'editUbtpost',
+      'fetchUbtposts',
+      'fetchCoursePosts',
+      'editCoursePost',
+      'deleteCoursePost',
+    ]),
     async deletePost() {
       this.loading = true;
-      await this.deleteUbtpost(this.ubtpost.ubtpostId);
-      await this.fetchUbtposts();
+      if (this.$route.params.courseId) {
+        const courseId = this.$route.params.courseId;
+        await this.deleteCoursePost({ courseId, postId: this.ubtpost.postId });
+        await this.fetchCoursePosts(courseId);
+      } else {
+        await this.deleteUbtpost(this.ubtpost.postId);
+        await this.fetchUbtposts();
+      }
       this.loading = false;
       this.deleteDialog = false;
     },
     async editPost() {
       this.loading = true;
-      await this.editUbtpost(this.newPost);
-      await this.fetchUbtposts();
+      if (this.$route.params.courseId) {
+        const courseId = this.$route.params.courseId;
+        await this.editCoursePost({ courseId, coursePost: this.newPost });
+        await this.fetchCoursePosts(courseId);
+      } else {
+        await this.editUbtpost(this.newPost);
+        await this.fetchUbtposts();
+      }
+
       this.componentKey += 1;
       this.loading = false;
       this.editDialog = false;
