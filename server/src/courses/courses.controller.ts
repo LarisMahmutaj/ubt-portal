@@ -68,10 +68,9 @@ export class CoursesController {
   @Post(':courseId/join')
   async joinCourse(
     @Param('courseId') courseId: string,
-    @Body() req,
+    @Request() req,
   ): Promise<CourseUser> {
-    const user = this.jwtService.verify(req.token);
-    return await this.coursesService.createCourseUser(courseId, user.userId);
+    return await this.coursesService.createCourseUser(courseId, req.user.sub);
   }
 
   // CoursePosts

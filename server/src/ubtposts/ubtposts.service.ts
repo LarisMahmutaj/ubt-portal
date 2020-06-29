@@ -11,9 +11,6 @@ export class UbtpostsService {
 
   async findAll() {
     return await this.ubtposts.find({
-      where: {
-        courseId: null,
-      },
       order: {
         date: 'DESC',
       },

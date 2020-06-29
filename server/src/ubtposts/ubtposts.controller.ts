@@ -7,17 +7,24 @@ import {
   Param,
   Body,
   UseGuards,
+  Request,
+  BadRequestException,
 } from '@nestjs/common';
 import { UbtpostsService } from './ubtposts.service';
 import { CreateUbtpostDto } from './ubtpost.dto';
 import { Ubtpost } from './ubtposts.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateResult, DeleteResult, InsertResult } from 'typeorm';
+import { Like } from './like.entity';
+import { LikesService } from './likes.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('ubtposts')
 export class UbtpostsController {
-  constructor(private readonly ubtpostsService: UbtpostsService) {}
+  constructor(
+    private readonly ubtpostsService: UbtpostsService,
+    private readonly likesService: LikesService,
+  ) {}
 
   @Get()
   async findAll(): Promise<Ubtpost[]> {
@@ -53,5 +60,37 @@ export class UbtpostsController {
   @Delete(':id')
   delete(@Param('id') id): Promise<DeleteResult> {
     return this.ubtpostsService.delete(id);
+  }
+
+  @Get(':id/likes')
+  async getPostLikes(@Param('id') postId: string): Promise<Like[]> {
+    return await this.likesService.getPostLikes(postId);
+  }
+
+  @Post(':id/likes')
+  async createPostLike(@Param('id') postId, @Request() req): Promise<Like> {
+    const exists = await this.likesService.findOne(req.user.sub, postId);
+    if (!exists) {
+      const like = new Like();
+      like.postId = postId;
+      like.userId = req.user.sub;
+
+      await this.likesService.create(like);
+      return like;
+    } else {
+      throw new BadRequestException({
+        status: 400,
+        error: 'You have already liked this post',
+      });
+    }
+  }
+
+  @Delete(':id/likes')
+  async removePostLike(@Param('id') postId, @Request() req): Promise<Like> {
+    const exists = await this.likesService.findOne(req.user.sub, postId);
+    if (exists) {
+      await this.likesService.delete(req.user.sub, postId);
+      return exists;
+    }
   }
 }

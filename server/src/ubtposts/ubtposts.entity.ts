@@ -34,33 +34,6 @@ export class Ubtpost extends Post {
     super();
     Object.assign(this, values);
   }
-
-  // @PrimaryGeneratedColumn('uuid')
-  // ubtpostId: string;
-
-  // @Column('varchar', { length: 5000 })
-  // content: string;
-
-  // @Column()
-  // date: Date;
-
-  // @Column()
-  // authorId: string;
-
-  // @ManyToOne((type) => User, {
-  //   nullable: false,
-  // })
-  // @JoinColumn({ name: 'authorId' })
-  // author: User;
-
-  // @Column({ nullable: true })
-  // courseId: string;
-
-  // @ManyToOne((type) => Course, {
-  //   nullable: true,
-  // })
-  // @JoinColumn({ name: 'courseId' })
-  // course: Course;
 }
 
 @Entity()
@@ -69,11 +42,12 @@ export class CoursePost extends Post {
     super();
     Object.assign(this, values);
   }
-  @Column({ nullable: true })
+  @Column()
   courseId: string;
 
   @ManyToOne((type) => Course, {
-    nullable: true,
+    nullable: false,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'courseId' })
   course: Course;

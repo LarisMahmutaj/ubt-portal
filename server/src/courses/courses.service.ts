@@ -64,8 +64,8 @@ export class CoursesService {
     });
   }
 
-  async delete(id: string) {
-    await this.courses.delete(id);
+  async delete(courseId: string) {
+    await this.courses.delete(courseId);
   }
 
   async update(courseId: string, course: Course) {
