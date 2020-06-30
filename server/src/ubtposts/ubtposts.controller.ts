@@ -14,16 +14,16 @@ import { UbtpostsService } from './ubtposts.service';
 import { CreateUbtpostDto } from './ubtpost.dto';
 import { Ubtpost } from './ubtposts.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UpdateResult, DeleteResult, InsertResult } from 'typeorm';
-import { Like } from './like.entity';
-import { LikesService } from './likes.service';
+import { DeleteResult } from 'typeorm';
+import { UbtpostLike } from './likes/like.entity';
+import { UbtpostLikesService } from './likes/ubtpostLikes.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('ubtposts')
 export class UbtpostsController {
   constructor(
     private readonly ubtpostsService: UbtpostsService,
-    private readonly likesService: LikesService,
+    private readonly likesService: UbtpostLikesService,
   ) {}
 
   @Get()
@@ -63,15 +63,18 @@ export class UbtpostsController {
   }
 
   @Get(':id/likes')
-  async getPostLikes(@Param('id') postId: string): Promise<Like[]> {
+  async getPostLikes(@Param('id') postId: string): Promise<UbtpostLike[]> {
     return await this.likesService.getPostLikes(postId);
   }
 
   @Post(':id/likes')
-  async createPostLike(@Param('id') postId, @Request() req): Promise<Like> {
+  async createPostLike(
+    @Param('id') postId,
+    @Request() req,
+  ): Promise<UbtpostLike> {
     const exists = await this.likesService.findOne(req.user.sub, postId);
     if (!exists) {
-      const like = new Like();
+      const like = new UbtpostLike();
       like.postId = postId;
       like.userId = req.user.sub;
 
@@ -86,7 +89,10 @@ export class UbtpostsController {
   }
 
   @Delete(':id/likes')
-  async removePostLike(@Param('id') postId, @Request() req): Promise<Like> {
+  async removePostLike(
+    @Param('id') postId,
+    @Request() req,
+  ): Promise<UbtpostLike> {
     const exists = await this.likesService.findOne(req.user.sub, postId);
     if (exists) {
       await this.likesService.delete(req.user.sub, postId);

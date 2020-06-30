@@ -3,13 +3,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UbtpostsService } from './ubtposts.service';
 import { UbtpostsController } from './ubtposts.controller';
 import { Ubtpost, CoursePost } from './ubtposts.entity';
-import { Like } from './like.entity';
-import { LikesService } from './likes.service';
+import { UbtpostLike, CoursePostLike } from './likes/like.entity';
+import { UbtpostLikesService } from './likes/ubtpostLikes.service';
+import { CoursePostLikesService } from './likes/coursePostLikes.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Ubtpost, Like])],
+  imports: [TypeOrmModule.forFeature([Ubtpost, UbtpostLike, CoursePostLike])],
   controllers: [UbtpostsController],
-  providers: [UbtpostsService, LikesService],
-  exports: [UbtpostsService],
+  providers: [UbtpostsService, UbtpostLikesService, CoursePostLikesService],
+  exports: [UbtpostsService, UbtpostLikesService, CoursePostLikesService],
 })
 export class UbtpostsModule {}

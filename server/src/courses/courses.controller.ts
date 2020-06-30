@@ -9,22 +9,25 @@ import {
   Request,
   ForbiddenException,
   UseGuards,
+  BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { Course, CourseUser, CoursePermission } from './courses.entity';
 import { CreateCourseDto, CreateCoursePostDto } from './courses.dto';
-import { UbtpostsService } from 'src/ubtposts/ubtposts.service';
 import { Ubtpost, CoursePost } from 'src/ubtposts/ubtposts.entity';
-import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { UbtpostLike, CoursePostLike } from 'src/ubtposts/likes/like.entity';
+import { UbtpostLikesService } from 'src/ubtposts/likes/ubtpostLikes.service';
+import { CoursePostLikesService } from 'src/ubtposts/likes/coursePostLikes.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('courses')
 export class CoursesController {
   constructor(
     private readonly coursesService: CoursesService,
-    private readonly ubtpostsService: UbtpostsService,
-    private readonly jwtService: JwtService,
+    private readonly ubtpostLikesService: UbtpostLikesService,
+    private readonly coursePostLikesService: CoursePostLikesService,
   ) {}
 
   @Get()
@@ -176,6 +179,97 @@ export class CoursesController {
         status: 403,
         error: 'You dont have permission to write in this course',
       });
+    }
+  }
+
+  @Get(':courseId/posts/:postId/likes')
+  async getPostLikes(
+    @Param('courseId') courseId,
+    @Param('postId') postId,
+    @Request() req,
+  ): Promise<CoursePostLike[]> {
+    const permission = await this.coursesService.checkPermission(
+      courseId,
+      req.user.sub,
+    );
+    if (
+      permission === CoursePermission.READ ||
+      permission === CoursePermission.WRITE
+    ) {
+      return await this.coursePostLikesService.getPostLikes(postId);
+    } else {
+      throw new ForbiddenException({
+        status: 403,
+        error: 'You dont have permission to view posts in this course',
+      });
+    }
+  }
+
+  @Post(':courseId/posts/:postId/likes')
+  async createPostLike(
+    @Param('courseId') courseId,
+    @Param('postId') postId,
+    @Request() req,
+  ): Promise<CoursePostLike> {
+    const permission = await this.coursesService.checkPermission(
+      courseId,
+      req.user.sub,
+    );
+
+    if (
+      permission === CoursePermission.READ ||
+      permission === CoursePermission.WRITE
+    ) {
+      const exists = await this.coursePostLikesService.findOne(
+        req.user.sub,
+        postId,
+      );
+      if (!exists) {
+        const like = new CoursePostLike();
+        like.postId = postId;
+        like.userId = req.user.sub;
+
+        await this.coursePostLikesService.create(like);
+        return like;
+      } else {
+        throw new BadRequestException({
+          status: 400,
+          error: 'You have already liked this post',
+        });
+      }
+    } else {
+      throw new ForbiddenException({
+        status: 403,
+        error: 'You dont have permission to view posts in this course',
+      });
+    }
+  }
+
+  @Delete(':courseId/posts/:postId/likes')
+  async removePostLike(
+    @Param('courseId') courseId,
+    @Param('postId') postId,
+    @Request() req,
+  ): Promise<CoursePostLike> {
+    const permission = await this.coursesService.checkPermission(
+      courseId,
+      req.user.sub,
+    );
+
+    if (
+      permission === CoursePermission.READ ||
+      permission === CoursePermission.WRITE
+    ) {
+      const exists = await this.coursePostLikesService.findOne(
+        req.user.sub,
+        postId,
+      );
+      if (exists) {
+        await this.coursePostLikesService.delete(req.user.sub, postId);
+        return exists;
+      } else {
+        throw new NotFoundException();
+      }
     }
   }
 }
