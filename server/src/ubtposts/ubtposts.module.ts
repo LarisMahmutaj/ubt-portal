@@ -2,15 +2,36 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UbtpostsService } from './ubtposts.service';
 import { UbtpostsController } from './ubtposts.controller';
-import { Ubtpost, CoursePost } from './ubtposts.entity';
+import { Ubtpost } from './ubtposts.entity';
 import { UbtpostLike, CoursePostLike } from './likes/like.entity';
-import { UbtpostLikesService } from './likes/ubtpostLikes.service';
-import { CoursePostLikesService } from './likes/coursePostLikes.service';
+import {
+  UbtpostCommentsService,
+  CoursePostCommentsService,
+} from './comments/ubtpostComments.service';
+import { UbtpostComment, CoursePostComment } from './comments/comment.entity';
+import {
+  UbtpostLikesService,
+  CoursePostLikesService,
+} from './likes/ubtpostLikes.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Ubtpost, UbtpostLike, CoursePostLike])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Ubtpost,
+      UbtpostLike,
+      CoursePostLike,
+      UbtpostComment,
+      CoursePostComment,
+    ]),
+  ],
   controllers: [UbtpostsController],
-  providers: [UbtpostsService, UbtpostLikesService, CoursePostLikesService],
-  exports: [UbtpostsService, UbtpostLikesService, CoursePostLikesService],
+  providers: [
+    UbtpostsService,
+    UbtpostLikesService,
+    CoursePostLikesService,
+    UbtpostCommentsService,
+    CoursePostCommentsService,
+  ],
+  exports: [CoursePostLikesService, CoursePostCommentsService],
 })
 export class UbtpostsModule {}

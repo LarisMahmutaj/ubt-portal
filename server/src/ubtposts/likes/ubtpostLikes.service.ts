@@ -36,3 +36,35 @@ export class UbtpostLikesService {
     await this.ubtpostLikes.delete({ userId, postId });
   }
 }
+
+@Injectable()
+export class CoursePostLikesService {
+  constructor(
+    @InjectRepository(CoursePostLike)
+    private coursePostLikes: Repository<CoursePostLike>,
+  ) {}
+
+  async findAll() {
+    return await this.coursePostLikes.find();
+  }
+
+  async getPostLikes(postId: string) {
+    return await this.coursePostLikes.find({ where: { postId } });
+  }
+
+  async getUserLikes(userId: string) {
+    return await this.coursePostLikes.find({ where: { userId } });
+  }
+
+  async findOne(userId: string, postId: string) {
+    return await this.coursePostLikes.findOne({ where: { userId, postId } });
+  }
+
+  async create(like: CoursePostLike) {
+    await this.coursePostLikes.insert(like);
+  }
+
+  async delete(userId: string, postId: string) {
+    await this.coursePostLikes.delete({ userId, postId });
+  }
+}

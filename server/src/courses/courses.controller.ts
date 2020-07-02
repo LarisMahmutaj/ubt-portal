@@ -17,17 +17,19 @@ import { Course, CourseUser, CoursePermission } from './courses.entity';
 import { CreateCourseDto, CreateCoursePostDto } from './courses.dto';
 import { Ubtpost, CoursePost } from 'src/ubtposts/ubtposts.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { UbtpostLike, CoursePostLike } from 'src/ubtposts/likes/like.entity';
-import { UbtpostLikesService } from 'src/ubtposts/likes/ubtpostLikes.service';
-import { CoursePostLikesService } from 'src/ubtposts/likes/coursePostLikes.service';
+import { CoursePostLike } from 'src/ubtposts/likes/like.entity';
+import { CoursePostLikesService } from 'src/ubtposts/likes/ubtpostLikes.service';
+import { CoursePostComment } from 'src/ubtposts/comments/comment.entity';
+import { CoursePostCommentsService } from 'src/ubtposts/comments/ubtpostComments.service';
+import { CommentDto } from 'src/ubtposts/ubtpost.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('courses')
 export class CoursesController {
   constructor(
     private readonly coursesService: CoursesService,
-    private readonly ubtpostLikesService: UbtpostLikesService,
-    private readonly coursePostLikesService: CoursePostLikesService,
+    private readonly likesService: CoursePostLikesService,
+    private readonly commentsService: CoursePostCommentsService,
   ) {}
 
   @Get()
@@ -182,6 +184,8 @@ export class CoursesController {
     }
   }
 
+  //Likes
+
   @Get(':courseId/posts/:postId/likes')
   async getPostLikes(
     @Param('courseId') courseId,
@@ -196,7 +200,7 @@ export class CoursesController {
       permission === CoursePermission.READ ||
       permission === CoursePermission.WRITE
     ) {
-      return await this.coursePostLikesService.getPostLikes(postId);
+      return await this.likesService.getPostLikes(postId);
     } else {
       throw new ForbiddenException({
         status: 403,
@@ -220,16 +224,13 @@ export class CoursesController {
       permission === CoursePermission.READ ||
       permission === CoursePermission.WRITE
     ) {
-      const exists = await this.coursePostLikesService.findOne(
-        req.user.sub,
-        postId,
-      );
+      const exists = await this.likesService.findOne(req.user.sub, postId);
       if (!exists) {
         const like = new CoursePostLike();
         like.postId = postId;
         like.userId = req.user.sub;
 
-        await this.coursePostLikesService.create(like);
+        await this.likesService.create(like);
         return like;
       } else {
         throw new BadRequestException({
@@ -260,16 +261,105 @@ export class CoursesController {
       permission === CoursePermission.READ ||
       permission === CoursePermission.WRITE
     ) {
-      const exists = await this.coursePostLikesService.findOne(
-        req.user.sub,
-        postId,
-      );
+      const exists = await this.likesService.findOne(req.user.sub, postId);
       if (exists) {
-        await this.coursePostLikesService.delete(req.user.sub, postId);
+        await this.likesService.delete(req.user.sub, postId);
         return exists;
       } else {
         throw new NotFoundException();
       }
+    }
+  }
+
+  //Comments
+
+  @Get(':courseId/posts/:postId/comments')
+  async getPostComments(
+    @Param('courseId') courseId,
+    @Param('postId') postId,
+    @Request() req,
+  ): Promise<CoursePostComment[]> {
+    const permission = await this.coursesService.checkPermission(
+      courseId,
+      req.user.sub,
+    );
+    if (
+      permission === CoursePermission.READ ||
+      permission === CoursePermission.WRITE
+    ) {
+      return await this.commentsService.getPostComments(postId);
+    } else {
+      throw new ForbiddenException({
+        status: 403,
+        error: 'You dont have permission to view posts in this course',
+      });
+    }
+  }
+
+  @Post(':courseId/posts/:postId/comments')
+  async createPostComment(
+    @Param('courseId') courseId,
+    @Param('postId') postId,
+    @Request() req,
+    @Body() createCommentDto: CommentDto,
+  ): Promise<CoursePostComment> {
+    const permission = await this.coursesService.checkPermission(
+      courseId,
+      req.user.sub,
+    );
+
+    if (
+      permission === CoursePermission.READ ||
+      permission === CoursePermission.WRITE
+    ) {
+      const comment = new CoursePostComment(createCommentDto);
+      comment.postId = postId;
+      comment.userId = req.user.sub;
+
+      await this.commentsService.create(comment);
+      return comment;
+    } else {
+      throw new ForbiddenException({
+        status: 403,
+        error: "You dont have 'Write' permission in this course",
+      });
+    }
+  }
+
+  @Delete(':courseId/comments/:commentId')
+  async deletePostComment(
+    @Param('courseId') courseId,
+    @Param('commentId') commentId,
+    @Request() req,
+  ) {
+    const permission = await this.coursesService.checkPermission(
+      courseId,
+      req.user.sub,
+    );
+
+    if (
+      permission === CoursePermission.READ ||
+      permission === CoursePermission.WRITE
+    ) {
+      const comment = await this.commentsService.findOne(commentId);
+      if (comment) {
+        if (comment.userId === req.user.sub) {
+          await this.commentsService.delete(commentId);
+          return comment;
+        } else {
+          throw new ForbiddenException({
+            status: 403,
+            error: 'You dont have permission to delete this comment',
+          });
+        }
+      } else {
+        throw new NotFoundException();
+      }
+    } else {
+      throw new ForbiddenException({
+        status: 403,
+        error: "You dont have 'Write' permission in this course",
+      });
     }
   }
 }

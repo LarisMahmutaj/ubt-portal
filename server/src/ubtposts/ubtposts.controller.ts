@@ -9,14 +9,18 @@ import {
   UseGuards,
   Request,
   BadRequestException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UbtpostsService } from './ubtposts.service';
-import { CreateUbtpostDto } from './ubtpost.dto';
+import { CreateUbtpostDto, CommentDto } from './ubtpost.dto';
 import { Ubtpost } from './ubtposts.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DeleteResult } from 'typeorm';
 import { UbtpostLike } from './likes/like.entity';
 import { UbtpostLikesService } from './likes/ubtpostLikes.service';
+import { UbtpostComment } from './comments/comment.entity';
+import { UbtpostCommentsService } from './comments/ubtpostComments.service';
+import { of } from 'rxjs';
 
 @UseGuards(JwtAuthGuard)
 @Controller('ubtposts')
@@ -24,6 +28,7 @@ export class UbtpostsController {
   constructor(
     private readonly ubtpostsService: UbtpostsService,
     private readonly likesService: UbtpostLikesService,
+    private readonly commentsService: UbtpostCommentsService,
   ) {}
 
   @Get()
@@ -62,6 +67,8 @@ export class UbtpostsController {
     return this.ubtpostsService.delete(id);
   }
 
+  //Likes
+
   @Get(':id/likes')
   async getPostLikes(@Param('id') postId: string): Promise<UbtpostLike[]> {
     return await this.likesService.getPostLikes(postId);
@@ -97,6 +104,39 @@ export class UbtpostsController {
     if (exists) {
       await this.likesService.delete(req.user.sub, postId);
       return exists;
+    }
+  }
+
+  //Comments
+  @Get(':id/comments')
+  async getPostComments(@Param('id') postId): Promise<UbtpostComment[]> {
+    return await this.commentsService.getPostComments(postId);
+  }
+
+  @Post(':id/comments')
+  async createPostComment(
+    @Param('id') postId,
+    @Request() req,
+    @Body() commentDto: CommentDto,
+  ): Promise<UbtpostComment> {
+    const comment = new UbtpostComment(commentDto);
+    comment.postId = postId;
+    comment.userId = req.user.sub;
+
+    await this.commentsService.create(comment);
+    return comment;
+  }
+
+  @Delete('comments/:commentId')
+  async deletePostComment(@Param('commentId') commentId, @Request() req) {
+    const comment = await this.commentsService.findOne(commentId);
+    if (comment.userId !== req.user.sub) {
+      throw new ForbiddenException({
+        status: 403,
+        error: 'You dont have permission to delete this comment',
+      });
+    } else {
+      await this.commentsService.delete(commentId);
     }
   }
 }
