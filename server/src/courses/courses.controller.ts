@@ -11,6 +11,7 @@ import {
   UseGuards,
   BadRequestException,
   NotFoundException,
+  Req,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { Course, CourseUser, CoursePermission } from './courses.entity';
@@ -45,10 +46,10 @@ export class CoursesController {
   @Post()
   async createCourse(
     @Body() createCourseDto: CreateCourseDto,
+    @Request() req,
   ): Promise<Course> {
     const newCourse = new Course(createCourseDto);
-    const { ownerId } = createCourseDto;
-    newCourse.ownerId = ownerId;
+    newCourse.ownerId = req.user.sub;
 
     await this.coursesService.create(newCourse);
     return newCourse;
