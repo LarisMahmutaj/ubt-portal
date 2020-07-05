@@ -17,22 +17,18 @@ const actions = {
     var u = JSON.parse(localStorage.getItem('user'));
     axios.defaults.headers.common['Authorization'] = `Bearer ${u.access_token}`;
 
-    const response = await axios.get('http://localhost:3000/courses');
+    const response = await axios.get('/api/courses');
     commit('SET_COURSES', response.data);
   },
   async setCurrentCourse({ commit }, courseId) {
-    const response = await axios.get(
-      `http://localhost:3000/courses/${courseId}`
-    );
+    const response = await axios.get(`/api/courses/${courseId}`);
 
     commit('SET_CURRENT_COURSE', response.data);
   },
   async fetchCoursePosts({ commit }, courseId) {
     var u = JSON.parse(localStorage.getItem('user'));
     axios.defaults.headers.common['Authorization'] = `Bearer ${u.access_token}`;
-    const response = await axios.get(
-      `http://localhost:3000/courses/${courseId}/posts`
-    );
+    const response = await axios.get(`/api/courses/${courseId}/posts`);
     commit('SET_COURSE_POSTS', response.data);
   },
 
@@ -40,7 +36,7 @@ const actions = {
     const courseId = data.courseId;
     const newPost = data.newPost;
     const response = await axios.post(
-      `http://localhost:3000/courses/${courseId}/posts`,
+      `/api/courses/${courseId}/posts`,
       newPost
     );
 
@@ -50,7 +46,7 @@ const actions = {
     const courseId = data.courseId;
     const coursePost = data.coursePost;
     const response = await axios.patch(
-      `http://localhost:3000/courses/${courseId}/posts/${coursePost.postId}`,
+      `/api/courses/${courseId}/posts/${coursePost.postId}`,
       coursePost
     );
 
@@ -60,7 +56,7 @@ const actions = {
     const courseId = data.courseId;
     const postId = data.postId;
     const response = await axios.delete(
-      `http://localhost:3000/courses/${courseId}/posts/${postId}`
+      `/api/courses/${courseId}/posts/${postId}`
     );
 
     commit('DELETE_POST', response.data);

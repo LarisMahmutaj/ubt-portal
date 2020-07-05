@@ -13,28 +13,22 @@ const actions = {
     var u = JSON.parse(localStorage.getItem('user'));
     axios.defaults.headers.common['Authorization'] = `Bearer ${u.access_token}`;
 
-    const response = await axios.get('http://localhost:3000/ubtposts');
+    const response = await axios.get('/api/ubtposts');
     commit('SET_UBTPOSTS', response.data);
   },
 
   async createUbtpost({ commit }, ubtpost) {
-    const response = await axios.post(
-      'http://localhost:3000/ubtposts',
-      ubtpost
-    );
+    const response = await axios.post('/api/ubtposts', ubtpost);
     commit('ADD_POST', response.data);
   },
 
   async deleteUbtpost({ commit }, id) {
-    const response = await axios.delete(`http://localhost:3000/ubtposts/${id}`);
+    const response = await axios.delete(`/api/ubtposts/${id}`);
     commit('DELETE_UBTPOST', response.data);
   },
 
   async editUbtpost({ commit }, ubtpost) {
-    await axios.put(
-      `http://localhost:3000/ubtposts/${ubtpost.postId}`,
-      ubtpost
-    );
+    await axios.put(`/api/ubtposts/${ubtpost.postId}`, ubtpost);
     commit('EDIT_UBTPOST', ubtpost);
   },
 };

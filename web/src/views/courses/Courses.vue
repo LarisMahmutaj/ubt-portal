@@ -1,7 +1,5 @@
 <template>
   <div>
-    <NavBar />
-
     <div v-for="course in allCourses" :key="course.name">
       <v-card class="mx-auto my-6" width="700">
         <v-row align="center">
@@ -29,14 +27,11 @@
 </template>
 
 <script>
-import NavBar from '../../components/layout/NavBar.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Courses',
-  components: {
-    NavBar: NavBar,
-  },
+  components: {},
   data() {
     return {};
   },

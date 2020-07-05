@@ -169,13 +169,10 @@ export default {
       } else {
         try {
           await this.login(this.formData);
-          if (this.loggedIn) {
-            this.$router.push('home');
-          } else {
-            console.log('Error');
-          }
+
+          this.$router.push('home');
         } catch (error) {
-          console.log(error);
+          this.setError(error.response.data.message);
         }
       }
       this.loading = false;

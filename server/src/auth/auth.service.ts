@@ -2,6 +2,7 @@ import {
   Injectable,
   BadRequestException,
   UnauthorizedException,
+  HttpException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
@@ -41,9 +42,13 @@ export class AuthService {
     const u = await this.usersService.findById(user.userId);
 
     if (u.active === false) {
-      throw new UnauthorizedException({
-        description: 'Please confirm your email to login',
-      });
+      throw new HttpException(
+        {
+          status: 401,
+          message: 'Please confirm your email to login',
+        },
+        401,
+      );
     } else {
       return {
         access_token: this.jwtService.sign(payload),

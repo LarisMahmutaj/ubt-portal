@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar />
     <div class="d-flex flex-nowrap justify-center ">
       <div class="d-flex justify-center ">
         <v-card
@@ -57,20 +56,14 @@
 </template>
 
 <script>
-import NavBar from '../../components/layout/NavBar.vue';
-
 export default {
   name: 'CreateCourse',
-  components: {
-    NavBar: NavBar,
-  },
   data() {
     return {
       course: {
         name: '',
         description: '',
         date: null,
-        ownerId: null,
         privacy: '',
       },
     };

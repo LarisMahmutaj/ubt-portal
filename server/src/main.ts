@@ -7,6 +7,7 @@ const cors = require('cors');
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cors());
+  app.setGlobalPrefix('api');
   app.use(bodyParser.urlencoded({ extended: false }));
   await app.listen(3000);
 }

@@ -1,65 +1,63 @@
-import axios from "axios"
+import axios from 'axios';
 
 const state = {
   user: null,
   loggedIn: false,
-  error: ""
-}
+  error: '',
+};
 
 const getters = {
   loggedIn: (state) => state.loggedIn,
   user: (state) => state.user,
-  error: (state) => state.error
-}
+  error: (state) => state.error,
+};
 
 const actions = {
   /*eslint-disable*/
   async register({ commit }, newUser) {
-    await axios.post("http://localhost:3000/users", newUser)
+    await axios.post('/api/users', newUser);
   },
 
   async login({ commit }, credentials) {
-    await axios
-      .post("http://localhost:3000/auth/login", credentials)
-      .then((response) => commit("SET_USER_DATA", response.data))
-      .catch((error) => console.log(error.message))
+    const response = await axios.post('/api/auth/login', credentials);
+    commit('SET_USER_DATA', response.data);
   },
 
   async logout({ commit }) {
     return new Promise((resolve, reject) => {
-      commit("CLEAR_USER_DATA")
-      localStorage.removeItem("user")
-      delete axios.defaults.headers.common["Authorization"]
-      resolve()
-    })
+      commit('CLEAR_USER_DATA');
+      localStorage.removeItem('user');
+      delete axios.defaults.headers.common['Authorization'];
+      resolve();
+    });
   },
 
-  async setError({ commit }, error){
-    commit('SET_ERROR', error)
-  }
-}
+  async setError({ commit }, error) {
+    commit('SET_ERROR', error);
+  },
+};
 
 const mutations = {
   SET_USER_DATA: (state, user) => {
-    state.user = user
-    state.loggedIn = true
-    localStorage.setItem("user", JSON.stringify(user))
+    state.user = user;
+    state.loggedIn = true;
+    localStorage.setItem('user', JSON.stringify(user));
     axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${user.access_token}`
+      'Authorization'
+    ] = `Bearer ${user.access_token}`;
   },
   CLEAR_USER_DATA: (state) => {
-    state.user = null
-    state.loggedIn = false
+    state.user = null;
+    state.loggedIn = false;
   },
-  SET_ERROR: (state, error) =>{
+  SET_ERROR: (state, error) => {
     state.error = error;
-  }
-}
+  },
+};
 
 export default {
   state,
   getters,
   actions,
   mutations,
-}
+};

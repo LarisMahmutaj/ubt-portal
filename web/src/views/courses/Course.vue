@@ -1,7 +1,5 @@
 <template>
   <div class="d-flex flex-nowrap justify-center ">
-    <NavBar />
-
     <v-container class="d-flex justify-center align-start">
       <div style="width:280px;">
         <v-btn
@@ -77,7 +75,6 @@
 <script>
 // @ is an alias to /src
 import { mapGetters, mapActions } from 'vuex';
-import NavBar from '../../components/layout/NavBar';
 import Ubtpost from '../../components/newsfeed/Ubtpost';
 import CreateUbtpost from '../../components/newsfeed/CreateUbtpost';
 
@@ -96,7 +93,6 @@ export default {
     ]),
   },
   components: {
-    NavBar: NavBar,
     Ubtpost: Ubtpost,
     CreateUbtpost: CreateUbtpost,
   },

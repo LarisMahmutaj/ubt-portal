@@ -6,22 +6,22 @@ import vuetify from './plugins/vuetify';
 import VueRouter from 'vue-router';
 import { routes } from './routes';
 import moment from 'moment';
-import Axios from 'axios';
+import axios from 'axios';
 import Vuelidate from 'vuelidate';
 import VuePrism from 'vue-prism';
 
 import 'prismjs/themes/prism-coy.css';
 Vue.use(Vuelidate);
 Vue.use(VuePrism);
-
 Vue.prototype.moment = moment;
-Vue.prototype.$http = Axios;
+Vue.use(moment);
+axios.defaults.baseURL = process.env.VUE_APP_AXIOS_BASEURL;
+Vue.prototype.$http = axios;
+
 const access_token = localStorage.getItem('access_token');
 if (access_token) {
   Vue.prototype.$http.defaults.headers.common['Authorization'] = access_token;
 }
-
-Vue.use(moment);
 
 Vue.config.productionTip = false;
 /*eslint-disable*/
