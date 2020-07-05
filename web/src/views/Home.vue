@@ -1,26 +1,9 @@
 <template>
   <div v-if="loggedIn">
-    <AppBar />
-    <v-container class="d-flex justify-center align-start">
-      <div style="width:280px;">
-        <v-btn text rounded class="justify-start font-size-15 mb-4 "
-          ><v-icon class="mx-3">mdi-home</v-icon>Home</v-btn
-        >
-        <v-btn text rounded class="justify-start font-size-15 mb-4"
-          ><v-icon class="mx-3">mdi-bell-outline</v-icon>Notification</v-btn
-        >
-        <v-btn text rounded class="justify-start font-size-15 mb-4">
-          <v-icon class="mx-3">mdi-message-outline</v-icon>Messages</v-btn
-        >
+    <NavBar />
 
-        <v-btn
-          text
-          rounded
-          class="justify-start font-size-15 mb-4"
-          @click="courses"
-          ><v-icon class="mx-3">mdi-account-group</v-icon> Courses</v-btn
-        >
-      </div>
+    <v-container class="d-flex justify-center align-start">
+      <SideMenu />
       <div>
         <CreateUbtpost :courseId="null" />
         <div v-for="u in allUbtposts" :key="u.postId">
@@ -35,7 +18,7 @@
 <script>
 // @ is an alias to /src
 import { mapGetters, mapActions } from 'vuex';
-import AppBar from '../components/layout/AppBar';
+import NavBar from '../components/layout/NavBar';
 import Ubtpost from '../components/newsfeed/Ubtpost';
 import CreateUbtpost from '../components/newsfeed/CreateUbtpost';
 import Events from '../components/newsfeed/Events';
@@ -43,14 +26,21 @@ import Events from '../components/newsfeed/Events';
 //
 export default {
   data() {
-    return {};
+    return {
+      drawer: null,
+      items: [
+        { title: 'Home', icon: 'dashboard' },
+        { title: 'About', icon: 'question_answer' },
+      ],
+    };
   },
+
   name: 'Home',
   computed: {
-    ...mapGetters(['allUbtposts', 'loggedIn']),
+    ...mapGetters(['allUbtposts', 'loggedIn', 'app']),
   },
   components: {
-    AppBar: AppBar,
+    NavBar: NavBar,
     Ubtpost: Ubtpost,
     CreateUbtpost: CreateUbtpost,
     Events: Events,

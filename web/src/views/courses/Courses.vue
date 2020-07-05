@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AppBar />
+    <NavBar />
 
     <div v-for="course in allCourses" :key="course.name">
       <v-card class="mx-auto my-6" width="700">
@@ -29,13 +29,13 @@
 </template>
 
 <script>
-import AppBar from '../../components/layout/AppBar.vue';
+import NavBar from '../../components/layout/NavBar.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Courses',
   components: {
-    AppBar: AppBar,
+    NavBar: NavBar,
   },
   data() {
     return {};

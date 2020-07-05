@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AppBar />
+    <NavBar />
     <div class="d-flex flex-nowrap justify-center ">
       <div class="d-flex justify-center ">
         <v-card
@@ -14,11 +14,15 @@
               <v-container>
                 <v-row>
                   <v-col cols="12">
-                    <v-text-field v-model="course.name" label="Name" required></v-text-field>
+                    <v-text-field
+                      v-model="course.name"
+                      label="Name"
+                      required
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-textarea
-                    v-model="course.description"
+                      v-model="course.description"
                       label="Description"
                       no-resize
                       rows="4"
@@ -37,7 +41,13 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn class="mx-3" rounded>Close</v-btn>
-              <v-btn color="light-blue darken-4" rounded class="mx-3" type="submit">Create</v-btn>
+              <v-btn
+                color="light-blue darken-4"
+                rounded
+                class="mx-3"
+                type="submit"
+                >Create</v-btn
+              >
             </v-card-actions>
           </v-form>
         </v-card>
@@ -47,24 +57,23 @@
 </template>
 
 <script>
-import AppBar from "../../components/layout/AppBar.vue";
+import NavBar from '../../components/layout/NavBar.vue';
 
 export default {
   name: 'CreateCourse',
   components: {
-    AppBar: AppBar,
+    NavBar: NavBar,
   },
-  data(){
+  data() {
     return {
       course: {
         name: '',
         description: '',
         date: null,
         ownerId: null,
-        privacy: ''
-      }
-    }
+        privacy: '',
+      },
+    };
   },
-  
 };
 </script>
