@@ -20,7 +20,6 @@ import { UbtpostLike } from './likes/like.entity';
 import { UbtpostLikesService } from './likes/ubtpostLikes.service';
 import { UbtpostComment } from './comments/comment.entity';
 import { UbtpostCommentsService } from './comments/ubtpostComments.service';
-import { of } from 'rxjs';
 
 @UseGuards(JwtAuthGuard)
 @Controller('ubtposts')

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { REGISTER, LOGIN } from '../../api/auth.api';
 
 const state = {
   user: null,
@@ -15,11 +16,11 @@ const getters = {
 const actions = {
   /*eslint-disable*/
   async register({ commit }, newUser) {
-    await axios.post('/api/users', newUser);
+    await REGISTER(newUser);
   },
 
   async login({ commit }, credentials) {
-    const response = await axios.post('/api/auth/login', credentials);
+    const response = await LOGIN(credentials);
     commit('SET_USER_DATA', response.data);
   },
 

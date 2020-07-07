@@ -1,4 +1,11 @@
-import axios from 'axios';
+import {
+  GET_COURSES,
+  GET_COURSE,
+  GET_COURSE_POSTS,
+  CREATE_COURSE_POST,
+  UPDATE_COURSE_POST,
+  DELETE_COURSE_POST,
+} from '../../api/courses.api';
 
 const state = {
   courses: [],
@@ -14,50 +21,38 @@ const getters = {
 
 const actions = {
   async fetchCourses({ commit }) {
-    var u = JSON.parse(localStorage.getItem('user'));
-    axios.defaults.headers.common['Authorization'] = `Bearer ${u.access_token}`;
-
-    const response = await axios.get('/api/courses');
+    const response = await GET_COURSES();
     commit('SET_COURSES', response.data);
   },
   async setCurrentCourse({ commit }, courseId) {
-    const response = await axios.get(`/api/courses/${courseId}`);
-
+    const response = await GET_COURSE(courseId);
     commit('SET_CURRENT_COURSE', response.data);
   },
   async fetchCoursePosts({ commit }, courseId) {
-    var u = JSON.parse(localStorage.getItem('user'));
-    axios.defaults.headers.common['Authorization'] = `Bearer ${u.access_token}`;
-    const response = await axios.get(`/api/courses/${courseId}/posts`);
+    const response = await GET_COURSE_POSTS(courseId);
     commit('SET_COURSE_POSTS', response.data);
   },
 
   async createCoursePost({ commit }, data) {
     const courseId = data.courseId;
     const newPost = data.newPost;
-    const response = await axios.post(
-      `/api/courses/${courseId}/posts`,
-      newPost
-    );
-
+    const response = await CREATE_COURSE_POST(courseId, newPost);
     commit('ADD_POST', response.data);
   },
   async editCoursePost({ commit }, data) {
     const courseId = data.courseId;
     const coursePost = data.coursePost;
-    const response = await axios.patch(
-      `/api/courses/${courseId}/posts/${coursePost.postId}`,
+    const response = UPDATE_COURSE_POST(
+      courseId,
+      coursePost.postId,
       coursePost
     );
-
     commit('EDIT_POST', response.data);
   },
   async deleteCoursePost({ commit }, data) {
     const courseId = data.courseId;
     const postId = data.postId;
-    const response = await axios.delete(
-      `/api/courses/${courseId}/posts/${postId}`
-    );
+    const response = await DELETE_COURSE_POST(courseId, postId);
 
     commit('DELETE_POST', response.data);
   },

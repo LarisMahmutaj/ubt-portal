@@ -2,7 +2,7 @@
   <div v-if="loggedIn">
     <v-container class="d-flex justify-center align-start">
       <div>
-        <CreateUbtpost :courseId="null" />
+        <CreateUbtpost />
         <div v-for="u in allUbtposts" :key="u.postId">
           <Ubtpost :ubtpost="u" />
         </div>
@@ -20,13 +20,7 @@ import CreateUbtpost from '../components/newsfeed/CreateUbtpost';
 //
 export default {
   data() {
-    return {
-      drawer: null,
-      items: [
-        { title: 'Home', icon: 'dashboard' },
-        { title: 'About', icon: 'question_answer' },
-      ],
-    };
+    return {};
   },
 
   name: 'Home',

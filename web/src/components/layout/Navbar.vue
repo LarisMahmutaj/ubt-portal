@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar app class="white">
+    <v-app-bar app dark color="indigo darken-3">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
       <div class="d-flex">
@@ -22,9 +22,16 @@
         </v-btn>
       </div>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" app fixed disable-route-watcher>
+    <v-navigation-drawer
+      dark
+      color="indigo darken-3"
+      v-model="drawer"
+      floating
+      app
+      disable-route-watcher
+    >
       <v-list>
-        <v-list-item link to="/home" color="primary">
+        <v-list-item to="/home">
           <v-list-item-icon>
             <v-icon>mdi-home</v-icon>
           </v-list-item-icon>
@@ -32,22 +39,27 @@
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-group prepend-icon="mdi-account-group" no-action :value="false">
+        <v-list-group
+          color="white"
+          prepend-icon="mdi-account-group"
+          no-action
+          :value="false"
+        >
           <template v-slot:activator>
             <v-list-item-title>Courses</v-list-item-title>
           </template>
-          <v-list-item link to="/courses">
+          <v-list-item to="/courses">
             <v-list-item-content>
               <v-list-item-title>Browse Courses</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item link to="/create-course">
+          <v-list-item to="/create-course">
             <v-list-item-content>
               <v-list-item-title>Create Course</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
-        <v-list-item link>
+        <v-list-item>
           <v-list-item-icon>
             <v-icon>mdi-bell</v-icon>
           </v-list-item-icon>
@@ -55,7 +67,7 @@
             <v-list-item-title>Invites</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item>
           <v-list-item-icon>
             <v-icon>mdi-message</v-icon>
           </v-list-item-icon>
@@ -67,11 +79,9 @@
     </v-navigation-drawer>
   </div>
 </template>
-<style>
-.link {
-  text-decoration: none;
-}
-</style>
+
+<style></style>
+
 <script>
 import { mapActions } from 'vuex';
 export default {
@@ -89,7 +99,6 @@ export default {
       await this.logout();
       this.$router.push('/');
     },
-
     async refresh() {
       this.loading = true;
       await this.fetchUbtposts();
