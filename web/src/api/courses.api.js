@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 var u = JSON.parse(localStorage.getItem('user'));
-axios.defaults.headers.common['Authorization'] = `Bearer ${u.access_token}`;
+if (u) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${u.access_token}`;
+}
 
 export const GET_COURSES = async () => {
   return await axios.get('/api/courses');

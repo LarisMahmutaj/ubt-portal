@@ -18,11 +18,6 @@ Vue.use(moment);
 axios.defaults.baseURL = process.env.VUE_APP_AXIOS_BASEURL;
 Vue.prototype.$http = axios;
 
-const access_token = localStorage.getItem('access_token');
-if (access_token) {
-  Vue.prototype.$http.defaults.headers.common['Authorization'] = access_token;
-}
-
 Vue.config.productionTip = false;
 /*eslint-disable*/
 Vue.config.errorHandler = function(err, vm, info) {

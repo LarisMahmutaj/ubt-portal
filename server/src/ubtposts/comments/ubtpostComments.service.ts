@@ -15,15 +15,26 @@ export class UbtpostCommentsService {
   }
 
   async getPostComments(postId: string) {
-    return await this.ubtpostComments.find({ where: { postId } });
+    return await this.ubtpostComments.find({
+      where: { postId },
+      relations: ['user'],
+      order: { date: 'ASC' },
+    });
   }
 
   async getUserComments(userId: string) {
     return await this.ubtpostComments.find({ where: { userId } });
   }
 
-  async findOne(commentId: string) {
+  async findOneById(commentId: string) {
     return await this.ubtpostComments.findOne({ commentId });
+  }
+
+  async findOne(userId: string, postId: string) {
+    return await this.ubtpostComments.findOne({
+      where: { userId, postId },
+      relations: ['user'],
+    });
   }
 
   async create(comment: UbtpostComment) {

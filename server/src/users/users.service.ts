@@ -31,8 +31,8 @@ export class UsersService {
     return user;
   }
 
-  async findById(id: string) {
-    return this.users.findOne({ userId: id });
+  async findById(userId: string) {
+    return await this.users.findOne(userId);
   }
 
   async create(user: User): Promise<User> {

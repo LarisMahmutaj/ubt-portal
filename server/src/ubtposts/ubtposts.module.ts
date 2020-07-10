@@ -13,6 +13,7 @@ import {
   UbtpostLikesService,
   CoursePostLikesService,
 } from './likes/ubtpostLikes.service';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import {
       UbtpostComment,
       CoursePostComment,
     ]),
+    UsersModule,
   ],
   controllers: [UbtpostsController],
   providers: [

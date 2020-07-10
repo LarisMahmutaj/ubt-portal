@@ -148,20 +148,66 @@
           <span class="subheading mr-2 indigo--text">256</span>
           <span class="mr-1"> </span>
           <v-btn depressed icon color="blue-grey lighten-1">
-            <v-icon color="blue-grey lighten-1" class="mr-0"
+            <v-icon
+              @click="toggleComments"
+              color="blue-grey lighten-1"
+              class="mr-0"
               >insert_comment</v-icon
             ></v-btn
           >
-          <span class="subheading">45</span>
+          <span class="subheading">{{ comments.length }}</span>
         </v-row>
       </v-list-item>
     </v-card-actions>
+    <v-divider></v-divider>
+    <v-list rounded color="#fcfcfc" v-if="showComments">
+      <v-list-item>
+        <v-form
+          @submit.prevent="postComment"
+          class="d-flex align-end"
+          style="width:100%"
+        >
+          <v-textarea
+            class="pr-2"
+            auto-grow
+            rows="1"
+            label="Write a comment..."
+            v-model="newComment.content"
+          ></v-textarea>
+          <v-btn
+            type="submit"
+            class="mb-6"
+            rounded
+            color="blue darken-4"
+            dark
+            small
+            >Post</v-btn
+          >
+        </v-form>
+      </v-list-item>
+      <v-list-item
+        class="comment"
+        v-for="comment in comments"
+        :key="comment.commentId"
+      >
+        <v-list-item-content>
+          <v-list-item-title class="font-weight-bold">{{
+            comment.user.fullname
+          }}</v-list-item-title>
+          {{ comment.content }}
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
   </v-card>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import VueMarkdown from 'vue-markdown';
+import {
+  GET_POST_COMMENTS,
+  CREATE_UBTPOST_COMMENT,
+} from '../../api/ubtposts.api.js';
 
 export default {
   data() {
@@ -171,6 +217,12 @@ export default {
       newPost: { ...this.ubtpost },
       componentKey: 0,
       loading: false,
+      showComments: false,
+      comments: [],
+      newComment: {
+        content: '',
+        date: null,
+      },
     };
   },
   name: 'Ubtpost',
@@ -218,6 +270,35 @@ export default {
       this.loading = false;
       this.editDialog = false;
     },
+    async toggleComments() {
+      if (this.showComments) {
+        this.showComments = false;
+      } else {
+        const response = await GET_POST_COMMENTS(this.ubtpost.postId);
+        this.comments = response.data;
+        this.showComments = true;
+      }
+    },
+    async postComment() {
+      this.newComment.date = new Date();
+
+      const response = await CREATE_UBTPOST_COMMENT(
+        this.ubtpost.postId,
+        this.newComment,
+        this.$route.params.courseId
+      );
+
+      this.newComment.content = '';
+      this.newComment.date = null;
+
+      this.comments.push(response.data);
+    },
   },
 };
 </script>
+
+<style scoped>
+.comment {
+  background-color: #e3f2fd;
+}
+</style>

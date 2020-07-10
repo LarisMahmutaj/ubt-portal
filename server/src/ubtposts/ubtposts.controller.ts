@@ -20,6 +20,7 @@ import { UbtpostLike } from './likes/like.entity';
 import { UbtpostLikesService } from './likes/ubtpostLikes.service';
 import { UbtpostComment } from './comments/comment.entity';
 import { UbtpostCommentsService } from './comments/ubtpostComments.service';
+import { UsersService } from 'src/users/users.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('ubtposts')
@@ -28,6 +29,7 @@ export class UbtpostsController {
     private readonly ubtpostsService: UbtpostsService,
     private readonly likesService: UbtpostLikesService,
     private readonly commentsService: UbtpostCommentsService,
+    private readonly usersService: UsersService,
   ) {}
 
   @Get()
@@ -123,12 +125,13 @@ export class UbtpostsController {
     comment.userId = req.user.sub;
 
     await this.commentsService.create(comment);
+    comment.user = await this.usersService.findById(req.user.id);
     return comment;
   }
 
   @Delete('comments/:commentId')
   async deletePostComment(@Param('commentId') commentId, @Request() req) {
-    const comment = await this.commentsService.findOne(commentId);
+    const comment = await this.commentsService.findOneById(commentId);
     if (comment.userId !== req.user.sub) {
       throw new ForbiddenException({
         status: 403,
