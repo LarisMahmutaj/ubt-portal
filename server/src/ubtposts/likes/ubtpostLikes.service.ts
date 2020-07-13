@@ -57,7 +57,9 @@ export class CoursePostLikesService {
   }
 
   async findOne(userId: string, postId: string) {
-    return await this.coursePostLikes.findOne({ where: { userId, postId } });
+    return await this.coursePostLikes.findOne({
+      where: { userId, postId },
+    });
   }
 
   async create(like: CoursePostLike) {

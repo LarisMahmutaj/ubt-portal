@@ -87,7 +87,7 @@ import {
   CREATE_POST_COMMENT,
   GET_POST_COMMENTS,
   DELETE_UBTPOST_COMMENT,
-} from '../../api/comments.api';
+} from '../../api/ubtposts.api';
 import { mapGetters } from 'vuex';
 export default {
   name: 'Comments',

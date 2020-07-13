@@ -142,10 +142,24 @@
         </v-list-item-content>
 
         <v-row align="center" justify="end">
-          <v-btn icon depressed color="#244082"
-            ><v-icon class="mr-0" color="#244082">mdi-heart</v-icon></v-btn
-          >
-          <span class="subheading mr-2 indigo--text">256</span>
+          <div v-if="liked">
+            <v-btn icon depressed color="blue darken-4" @click="unlikePost">
+              <v-icon class="mr-0" color="blue darken-4"
+                >mdi-heart</v-icon
+              ></v-btn
+            >
+            <span class="subheading mr-2 blue--text text--darken-4">{{
+              likes.length
+            }}</span>
+          </div>
+          <div v-else>
+            <v-btn icon depressed color="blue-grey" @click="likePost"
+              ><v-icon class="mr-0" color="blue-grey">mdi-heart</v-icon></v-btn
+            >
+            <span class="subheading mr-2 blue-grey--text">{{
+              likes.length
+            }}</span>
+          </div>
           <span class="mr-1"> </span>
           <v-btn depressed icon color="blue-grey lighten-1">
             <v-icon
@@ -159,7 +173,6 @@
         </v-row>
       </v-list-item>
     </v-card-actions>
-    <!-- <v-divider></v-divider> -->
 
     <Comments
       v-if="showComments"
@@ -173,7 +186,12 @@
 import Comments from './Comments';
 import { mapActions, mapGetters } from 'vuex';
 import VueMarkdown from 'vue-markdown';
-import { GET_POST_COMMENT_COUNT } from '../../api/comments.api.js';
+import {
+  GET_POST_LIKES,
+  LIKE_POST,
+  UNLIKE_POST,
+  GET_POST_COMMENT_COUNT,
+} from '../../api/ubtposts.api.js';
 
 export default {
   data() {
@@ -189,6 +207,8 @@ export default {
         content: '',
         date: null,
       },
+      likes: [],
+      liked: false,
     };
   },
   name: 'Ubtpost',
@@ -206,6 +226,7 @@ export default {
       this.$route.params.courseId
     );
     this.commentCount = response.data;
+    this.getLikes();
   },
   methods: {
     ...mapActions([
@@ -243,6 +264,28 @@ export default {
       this.componentKey += 1;
       this.loading = false;
       this.editDialog = false;
+    },
+    async getLikes() {
+      const response = await GET_POST_LIKES(
+        this.ubtpost.postId,
+        this.$route.params.courseId
+      );
+      this.likes = response.data;
+      if (
+        this.likes.filter((like) => like.userId === this.user.userId).length !==
+        0
+      ) {
+        this.liked = true;
+      }
+    },
+    async likePost() {
+      await LIKE_POST(this.ubtpost.postId, this.$route.params.courseId);
+      await this.getLikes();
+    },
+    async unlikePost() {
+      await UNLIKE_POST(this.ubtpost.postId, this.$route.params.courseId);
+      await this.getLikes();
+      this.liked = false;
     },
     async toggleComments() {
       if (this.showComments) {

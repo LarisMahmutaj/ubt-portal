@@ -130,7 +130,7 @@ export class UbtpostsController {
     comment.userId = req.user.sub;
 
     await this.commentsService.create(comment);
-    comment.user = await this.usersService.findById(req.user.id);
+    comment.user = await this.usersService.findById(req.user.sub);
     return comment;
   }
 
