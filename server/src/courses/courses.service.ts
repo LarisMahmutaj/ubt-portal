@@ -37,9 +37,6 @@ export class CoursesService {
 
   async findAll() {
     return await this.courses.find({
-      where: {
-        privacy: Privacy.PUBLIC,
-      },
       order: {
         name: 'ASC',
       },

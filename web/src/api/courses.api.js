@@ -18,7 +18,7 @@ export const GET_COURSE_POSTS = async (id) => {
 };
 
 export const CREATE_COURSE_POST = async (courseId, post) => {
-  return await axios.post(`/api/courses/${courseId}`, post);
+  return await axios.post(`/api/courses/${courseId}/posts`, post);
 };
 
 export const UPDATE_COURSE_POST = async (courseId, postId, post) => {

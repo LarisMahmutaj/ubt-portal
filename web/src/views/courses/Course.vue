@@ -69,6 +69,7 @@ export default {
     CreateUbtpost: CreateUbtpost,
   },
   async beforeMount() {
+    await this.setCurrentCourse(this.$route.params.courseId);
     await this.fetchCoursePosts(this.$route.params.courseId);
   },
   methods: {

@@ -8,12 +8,14 @@ import { JwtModule } from '@nestjs/jwt';
 
 import * as dotenv from 'dotenv';
 import { CoursePost } from 'src/ubtposts/ubtposts.entity';
+import { UsersModule } from 'src/users/users.module';
 dotenv.config();
 @Module({
   imports: [
     TypeOrmModule.forFeature([Course, CourseUser, CoursePost]),
     UbtpostsModule,
-    JwtModule.register({ secret: process.env.SECRET }),
+    UsersModule,
+    // JwtModule.register({ secret: process.env.SECRET }),
   ],
   controllers: [CoursesController],
   providers: [CoursesService],

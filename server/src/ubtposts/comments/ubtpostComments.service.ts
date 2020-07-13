@@ -22,6 +22,10 @@ export class UbtpostCommentsService {
     });
   }
 
+  async getPostCommentCount(postId: string) {
+    return await this.ubtpostComments.count({ postId: postId });
+  }
+
   async getUserComments(userId: string) {
     return await this.ubtpostComments.find({ where: { userId } });
   }
@@ -58,7 +62,15 @@ export class CoursePostCommentsService {
   }
 
   async getPostComments(postId: string) {
-    return await this.coursePostComments.find({ where: { postId } });
+    return await this.coursePostComments.find({
+      where: { postId },
+      relations: ['user'],
+      order: { date: 'ASC' },
+    });
+  }
+
+  async getPostCommentCount(postId: string) {
+    return await this.coursePostComments.count({ postId: postId });
   }
 
   async getUserComments(userId: string) {

@@ -23,6 +23,7 @@ import { CoursePostLikesService } from 'src/ubtposts/likes/ubtpostLikes.service'
 import { CoursePostComment } from 'src/ubtposts/comments/comment.entity';
 import { CoursePostCommentsService } from 'src/ubtposts/comments/ubtpostComments.service';
 import { CommentDto } from 'src/ubtposts/ubtpost.dto';
+import { UsersService } from 'src/users/users.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('courses')
@@ -31,6 +32,7 @@ export class CoursesController {
     private readonly coursesService: CoursesService,
     private readonly likesService: CoursePostLikesService,
     private readonly commentsService: CoursePostCommentsService,
+    private readonly usersService: UsersService,
   ) {}
 
   @Get()
@@ -80,6 +82,7 @@ export class CoursesController {
   }
 
   // CoursePosts
+
   @Get(':courseId/posts')
   async getCoursePosts(
     @Param('courseId') courseId,
@@ -288,7 +291,32 @@ export class CoursesController {
       permission === CoursePermission.READ ||
       permission === CoursePermission.WRITE
     ) {
-      return await this.commentsService.getPostComments(postId);
+      const comments = await this.commentsService.getPostComments(postId);
+      console.error(comments);
+      return comments;
+    } else {
+      throw new ForbiddenException({
+        status: 403,
+        error: 'You dont have permission to view posts in this course',
+      });
+    }
+  }
+
+  @Get(':courseId/posts/:postId/comments/count')
+  async getPostCommentCount(
+    @Param('courseId') courseId,
+    @Param('postId') postId,
+    @Request() req,
+  ): Promise<number> {
+    const permission = await this.coursesService.checkPermission(
+      courseId,
+      req.user.sub,
+    );
+    if (
+      permission === CoursePermission.READ ||
+      permission === CoursePermission.WRITE
+    ) {
+      return await this.commentsService.getPostCommentCount(postId);
     } else {
       throw new ForbiddenException({
         status: 403,
@@ -318,6 +346,7 @@ export class CoursesController {
       comment.userId = req.user.sub;
 
       await this.commentsService.create(comment);
+      comment.user = await this.usersService.findById(req.user.sub);
       return comment;
     } else {
       throw new ForbiddenException({

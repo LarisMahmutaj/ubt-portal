@@ -114,6 +114,11 @@ export class UbtpostsController {
     return await this.commentsService.getPostComments(postId);
   }
 
+  @Get(':id/comments/count')
+  async getPostCommentCount(@Param('id') postId): Promise<number> {
+    return await this.commentsService.getPostCommentCount(postId);
+  }
+
   @Post(':id/comments')
   async createPostComment(
     @Param('id') postId,
@@ -130,7 +135,10 @@ export class UbtpostsController {
   }
 
   @Delete('comments/:commentId')
-  async deletePostComment(@Param('commentId') commentId, @Request() req) {
+  async deletePostComment(
+    @Param('commentId') commentId,
+    @Request() req,
+  ): Promise<UbtpostComment> {
     const comment = await this.commentsService.findOneById(commentId);
     if (comment.userId !== req.user.sub) {
       throw new ForbiddenException({
@@ -139,6 +147,7 @@ export class UbtpostsController {
       });
     } else {
       await this.commentsService.delete(commentId);
+      return comment;
     }
   }
 }
