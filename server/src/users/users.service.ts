@@ -62,7 +62,7 @@ export class UsersService {
       const payload = { userId: user.userId };
       const token = this.jwtService.sign(payload);
 
-      const url = `http://localhost:3000/users/confirmation/${token}`;
+      const url = `http://localhost:3000/api/users/confirmation/${token}`;
 
       transporter.sendMail({
         to: user.email,
