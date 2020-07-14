@@ -21,6 +21,12 @@ export enum CoursePermission {
   WRITE = 'write',
 }
 
+export enum Role {
+  MEMBER = 'member',
+  ADMIN = 'admin',
+  OWNER = 'owner',
+}
+
 @Entity()
 export class Course {
   constructor(values: Partial<Course> = {}) {

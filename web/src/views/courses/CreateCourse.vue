@@ -23,14 +23,16 @@
                     <v-textarea
                       v-model="course.description"
                       label="Description"
-                      no-resize
-                      rows="4"
+                      rows="1"
                       auto-grow
                     ></v-textarea>
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-select
-                      :items="['Private', 'Public']"
+                      v-model="course.privacy"
+                      :items="items"
+                      item-text="text"
+                      item-value="value"
                       label="Privacy"
                     ></v-select>
                   </v-col>
@@ -41,8 +43,9 @@
               <v-spacer></v-spacer>
               <v-btn class="mx-3" rounded>Close</v-btn>
               <v-btn
-                color="light-blue darken-4"
+                color="blue darken-4"
                 rounded
+                dark
                 class="mx-3"
                 type="submit"
                 >Create</v-btn
@@ -56,6 +59,8 @@
 </template>
 
 <script>
+import { CREATE_COURSE } from '../../api/courses.api';
+
 export default {
   name: 'CreateCourse',
   data() {
@@ -64,9 +69,24 @@ export default {
         name: '',
         description: '',
         date: null,
-        privacy: '',
+        privacy: {},
       },
+      items: [
+        { text: 'Private', value: 'private' },
+        { text: 'Public', value: 'public' },
+      ],
     };
+  },
+  methods: {
+    async onSubmit() {
+      this.course.date = new Date();
+      const response = await CREATE_COURSE(this.course);
+      const newCourse = response.data;
+      this.$router.push({
+        name: 'course',
+        params: { courseId: newCourse.courseId },
+      });
+    },
   },
 };
 </script>

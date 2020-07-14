@@ -53,6 +53,11 @@
               <v-list-item-title>Browse Courses</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item to="/joined-courses">
+            <v-list-item-content>
+              <v-list-item-title>Joined Courses</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item to="/create-course">
             <v-list-item-content>
               <v-list-item-title>Create Course</v-list-item-title>

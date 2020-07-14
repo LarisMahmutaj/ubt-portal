@@ -1,4 +1,4 @@
-import { Privacy } from './courses.entity';
+import { Privacy, CoursePermission, Role } from './courses.entity';
 
 export class CreateCourseDto {
   readonly name: string;
@@ -12,4 +12,11 @@ export class CreateCoursePostDto {
   readonly content: string;
   readonly date: Date;
   readonly authorId?: string;
+}
+
+export class CreateCourseUserDto {
+  readonly courseId: string;
+  readonly userId: string;
+  readonly coursePermission: CoursePermission;
+  readonly role: Role;
 }

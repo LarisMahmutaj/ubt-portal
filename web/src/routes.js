@@ -5,6 +5,7 @@ import EmailConfirmed from './views/EmailConfirmed.vue';
 import Courses from './views/courses/Courses.vue';
 import Course from './views/courses/Course.vue';
 import CreateCourse from './views/courses/CreateCourse.vue';
+import JoinedCourses from './views/courses/JoinedCourses.vue';
 
 export const routes = [
   {
@@ -29,5 +30,6 @@ export const routes = [
     component: Course,
     params: true,
   },
-  { path: '/create-course', name:'createCourse', component: CreateCourse},
+  { path: '/create-course', name: 'createCourse', component: CreateCourse },
+  { path: '/joined-courses', name: 'joinedCourses', component: JoinedCourses },
 ];

@@ -35,13 +35,31 @@ export class CoursesService {
     }
   }
 
-  async findAll() {
+  async findPublicCourses() {
     return await this.courses.find({
+      where: {
+        privacy: Privacy.PUBLIC,
+      },
       order: {
         name: 'ASC',
       },
       relations: ['owner'],
     });
+  }
+
+  async findJoinedCourses(userId) {
+    const courseUsers = await this.courseUsers.find({
+      where: {
+        userId,
+      },
+      relations: ['course'],
+    });
+    const courses = [];
+    courseUsers.forEach((courseUser) => {
+      courses.push(courseUser.course);
+    });
+
+    return courses;
   }
 
   async findOneById(courseId: string) {
@@ -52,13 +70,16 @@ export class CoursesService {
   }
 
   async create(course: Course) {
-    await this.courses.insert({
+    const result = await this.courses.insert({
       name: course.name,
       description: course.description,
       date: course.date,
       ownerId: course.ownerId,
       privacy: course.privacy,
     });
+
+    course.courseId = result.identifiers[0].courseId;
+    return course;
   }
 
   async delete(courseId: string) {
@@ -76,13 +97,8 @@ export class CoursesService {
     );
   }
 
-  async createCourseUser(courseId: string, userId: string) {
-    var courseUser = new CourseUser({
-      courseId: courseId,
-      userId: userId,
-      coursePermission: CoursePermission.WRITE,
-      role: 'Member',
-    });
+  async createCourseUser(courseUser: CourseUser) {
+    var courseUser = new CourseUser(courseUser);
 
     await this.courseUsers.insert(courseUser);
     return courseUser;

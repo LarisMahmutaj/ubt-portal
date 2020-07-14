@@ -14,8 +14,12 @@ import {
   Req,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
-import { Course, CourseUser, CoursePermission } from './courses.entity';
-import { CreateCourseDto, CreateCoursePostDto } from './courses.dto';
+import { Course, CourseUser, CoursePermission, Role } from './courses.entity';
+import {
+  CreateCourseDto,
+  CreateCoursePostDto,
+  CreateCourseUserDto,
+} from './courses.dto';
 import { Ubtpost, CoursePost } from 'src/ubtposts/ubtposts.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CoursePostLike } from 'src/ubtposts/likes/like.entity';
@@ -36,8 +40,13 @@ export class CoursesController {
   ) {}
 
   @Get()
-  async findAllCourses(): Promise<Course[]> {
-    return await this.coursesService.findAll();
+  async getPublicCourses(): Promise<Course[]> {
+    return await this.coursesService.findPublicCourses();
+  }
+
+  @Get('/joined')
+  async getJoinedCourses(@Request() req): Promise<Course[]> {
+    return await this.coursesService.findJoinedCourses(req.user.sub);
   }
 
   @Get(':courseId')
@@ -53,8 +62,15 @@ export class CoursesController {
     const newCourse = new Course(createCourseDto);
     newCourse.ownerId = req.user.sub;
 
-    await this.coursesService.create(newCourse);
-    return newCourse;
+    const createdCourse = await this.coursesService.create(newCourse);
+    const courseUser = new CourseUser({
+      courseId: createdCourse.courseId,
+      userId: req.user.sub,
+      coursePermission: CoursePermission.WRITE,
+      role: Role.OWNER,
+    });
+    await this.coursesService.createCourseUser(courseUser);
+    return createdCourse;
   }
 
   @Patch(':courseId')
@@ -77,8 +93,10 @@ export class CoursesController {
   async joinCourse(
     @Param('courseId') courseId: string,
     @Request() req,
+    @Body() createCourseUserDto: CreateCourseUserDto,
   ): Promise<CourseUser> {
-    return await this.coursesService.createCourseUser(courseId, req.user.sub);
+    const courseUser = new CourseUser(createCourseUserDto);
+    return await this.coursesService.createCourseUser(courseUser);
   }
 
   // CoursePosts

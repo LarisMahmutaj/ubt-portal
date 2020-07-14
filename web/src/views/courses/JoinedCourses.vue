@@ -27,10 +27,9 @@
 </template>
 
 <script>
-import { GET_COURSES } from '../../api/courses.api';
-
+import { GET_JOINED_COURSES } from '../../api/courses.api';
 export default {
-  name: 'Courses',
+  name: 'JoinedCourses',
   components: {},
   data() {
     return {
@@ -39,7 +38,7 @@ export default {
   },
 
   async beforeMount() {
-    const response = await GET_COURSES();
+    const response = await GET_JOINED_COURSES();
     this.courses = response.data;
   },
   methods: {

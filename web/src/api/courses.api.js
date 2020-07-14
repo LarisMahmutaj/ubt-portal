@@ -9,8 +9,16 @@ export const GET_COURSES = async () => {
   return await axios.get('/api/courses');
 };
 
+export const GET_JOINED_COURSES = async () => {
+  return await axios.get('/api/courses/joined');
+};
+
 export const GET_COURSE = async (id) => {
   return await axios.get(`/api/courses/${id}`);
+};
+
+export const CREATE_COURSE = async (course) => {
+  return await axios.post('/api/courses', course);
 };
 
 export const GET_COURSE_POSTS = async (id) => {
