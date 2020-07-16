@@ -13,6 +13,10 @@ export const GET_JOINED_COURSES = async () => {
   return await axios.get('/api/courses/joined');
 };
 
+export const GET_USER_COURSES = async () => {
+  return await axios.get('/api/courses/my');
+};
+
 export const GET_COURSE = async (id) => {
   return await axios.get(`/api/courses/${id}`);
 };

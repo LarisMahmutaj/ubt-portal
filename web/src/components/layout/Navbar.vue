@@ -48,9 +48,9 @@
           <template v-slot:activator>
             <v-list-item-title>Courses</v-list-item-title>
           </template>
-          <v-list-item to="/courses">
+          <v-list-item to="/my-courses">
             <v-list-item-content>
-              <v-list-item-title>Browse Courses</v-list-item-title>
+              <v-list-item-title>My Courses</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item to="/joined-courses">
@@ -61,6 +61,11 @@
           <v-list-item to="/create-course">
             <v-list-item-content>
               <v-list-item-title>Create Course</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item to="/courses">
+            <v-list-item-content>
+              <v-list-item-title>Browse Courses</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-group>

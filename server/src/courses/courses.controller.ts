@@ -11,7 +11,7 @@ import {
   UseGuards,
   BadRequestException,
   NotFoundException,
-  Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { Course, CourseUser, CoursePermission, Role } from './courses.entity';
@@ -28,6 +28,9 @@ import { CoursePostComment } from 'src/ubtposts/comments/comment.entity';
 import { CoursePostCommentsService } from 'src/ubtposts/comments/ubtpostComments.service';
 import { CommentDto } from 'src/ubtposts/ubtpost.dto';
 import { UsersService } from 'src/users/users.service';
+import { InvitationsService } from './invitations.service';
+import { Invitation } from './invitations.entity';
+import { CreateInvitationDto } from './invitations.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('courses')
@@ -37,6 +40,7 @@ export class CoursesController {
     private readonly likesService: CoursePostLikesService,
     private readonly commentsService: CoursePostCommentsService,
     private readonly usersService: UsersService,
+    private readonly invitationsService: InvitationsService,
   ) {}
 
   @Get()
@@ -47,6 +51,11 @@ export class CoursesController {
   @Get('/joined')
   async getJoinedCourses(@Request() req): Promise<Course[]> {
     return await this.coursesService.findJoinedCourses(req.user.sub);
+  }
+
+  @Get('/my')
+  async getUserCourses(@Request() req): Promise<Course[]> {
+    return await this.coursesService.findUserCourses(req.user.sub);
   }
 
   @Get(':courseId')
@@ -87,16 +96,6 @@ export class CoursesController {
   async deleteCourse(@Param('courseId') courseId): Promise<Course> {
     await this.coursesService.delete(courseId);
     return { ...courseId };
-  }
-
-  @Post(':courseId/join')
-  async joinCourse(
-    @Param('courseId') courseId: string,
-    @Request() req,
-    @Body() createCourseUserDto: CreateCourseUserDto,
-  ): Promise<CourseUser> {
-    const courseUser = new CourseUser(createCourseUserDto);
-    return await this.coursesService.createCourseUser(courseUser);
   }
 
   // CoursePosts
@@ -408,6 +407,40 @@ export class CoursesController {
         status: 403,
         error: "You dont have 'Write' permission in this course",
       });
+    }
+  }
+
+  // Invitations
+  @Post(':courseId/join')
+  async joinCourse(
+    @Param('courseId') courseId: string,
+    @Request() req,
+    @Body() createCourseUserDto: CreateCourseUserDto,
+  ): Promise<CourseUser> {
+    const courseUser = new CourseUser(createCourseUserDto);
+    return await this.coursesService.createCourseUser(courseUser);
+  }
+
+  @Post(':courseId/invitations')
+  async createInvite(
+    @Param('courseId') courseId: string,
+    @Request() req,
+    @Body() createInvitationDto: CreateInvitationDto,
+  ): Promise<Invitation> {
+    const course = await this.coursesService.findOneById(courseId);
+    if (req.user.sub != course.ownerId) {
+      throw new ForbiddenException({
+        status: 403,
+        message: 'You dont have permission to send invitations in this course',
+      });
+    } else {
+      const invitation = new Invitation(createInvitationDto);
+      invitation.courseId = courseId;
+      await this.invitationsService.create(invitation);
+      return await this.invitationsService.findOne(
+        invitation.userEmail,
+        courseId,
+      );
     }
   }
 }

@@ -93,10 +93,12 @@ export class CourseUser {
   @Column({
     type: 'enum',
     enum: CoursePermission,
-    default: CoursePermission.NONE,
+    default: CoursePermission.WRITE,
   })
   coursePermission: CoursePermission;
 
-  @Column()
+  @Column({
+    default: 'Member',
+  })
   role: string;
 }

@@ -8,6 +8,7 @@
           max-width="600"
           rounded
         >
+          <v-card-title>Create Course</v-card-title>
           <v-form @submit.prevent="onSubmit">
             <v-card-text>
               <v-container>

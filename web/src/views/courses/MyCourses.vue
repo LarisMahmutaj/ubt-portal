@@ -4,7 +4,7 @@
       <v-card class="mx-auto my-6" width="700">
         <v-row align="center">
           <v-col>
-            <v-card-title class="headline">{{ course.name }}</v-card-title>
+            <v-card-title>{{ course.name }}</v-card-title>
             <v-icon class="mx-3">mdi-account</v-icon>
           </v-col>
           <v-col>
@@ -27,19 +27,17 @@
 </template>
 
 <script>
-import { GET_COURSES } from '../../api/courses.api';
+import { GET_USER_COURSES } from '../../api/courses.api';
 
 export default {
-  name: 'Courses',
-  components: {},
+  name: 'MyCourses',
   data() {
     return {
       courses: [],
     };
   },
-
-  async beforeMount() {
-    const response = await GET_COURSES();
+  async created() {
+    const response = await GET_USER_COURSES();
     this.courses = response.data;
   },
   methods: {
@@ -49,3 +47,5 @@ export default {
   },
 };
 </script>
+
+<style></style>

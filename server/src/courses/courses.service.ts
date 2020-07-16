@@ -6,8 +6,7 @@ import {
   CoursePermission,
 } from './courses.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, InsertResult, UpdateResult } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
+import { Repository } from 'typeorm';
 import { CoursePost } from 'src/ubtposts/ubtposts.entity';
 
 @Injectable()
@@ -60,6 +59,13 @@ export class CoursesService {
     });
 
     return courses;
+  }
+
+  async findUserCourses(userId: string) {
+    return await this.courses.find({
+      where: { ownerId: userId },
+      order: { name: 'ASC' },
+    });
   }
 
   async findOneById(courseId: string) {
