@@ -98,11 +98,11 @@
                   color="primary"
                   >Log In</v-btn
                 >
-                <v-btn v-else type="submit" class="my-2" block color="primary"
+                <v-btn v-else type="submit" class="my-6" block color="primary"
                   >Log In</v-btn
                 >
               </v-form>
-              <div class="d-flex justify-start mx-auto ">
+              <!-- <div class="d-flex justify-start mx-auto ">
                 <v-card-title class="font-weight-bold subtitle-1"
                   >Or sign in with</v-card-title
                 >
@@ -115,7 +115,7 @@
                   <v-icon class="mx-1">mdi-facebook</v-icon>
                   Facebook</v-btn
                 >
-              </div>
+              </div> -->
             </v-container>
           </div>
         </v-container>

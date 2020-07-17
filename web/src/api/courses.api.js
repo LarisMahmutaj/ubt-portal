@@ -40,3 +40,23 @@ export const UPDATE_COURSE_POST = async (courseId, postId, post) => {
 export const DELETE_COURSE_POST = async (courseId, postId) => {
   return await axios.delete(`/api/courses/${courseId}/posts/${postId}`);
 };
+
+export const SEND_INVITE = async (courseId, email) => {
+  return await axios.post(`/api/courses/${courseId}/invitations`, {
+    userEmail: email,
+  });
+};
+
+export const GET_USER_INVITES = async () => {
+  return await axios.get('/api/invitations');
+};
+
+export const UPDATE_INVITATION = async (courseId, accepted) => {
+  return await axios.patch(`/api/invitations/${courseId}`, accepted);
+};
+
+export const SEARCH_USERS = async (courseId, text) => {
+  return await axios.post(`api/courses/${courseId}/search-users`, {
+    text: text,
+  });
+};

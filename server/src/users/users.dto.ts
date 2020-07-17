@@ -4,3 +4,7 @@ export class RegisterUserDto {
   readonly password: string;
   readonly date: Date;
 }
+
+export class SearchUsersDto {
+  readonly text: string;
+}

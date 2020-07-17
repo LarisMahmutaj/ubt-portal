@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from './users.entity';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as nodemailer from 'nodemailer';
@@ -15,6 +15,12 @@ export class UsersService {
 
   async findOne(email: string): Promise<User> {
     return await this.users.findOne({ email: email });
+  }
+
+  async searchUsers(text: string) {
+    return await this.users.find({
+      where: [{ fullname: Like(`%${text}%`) }, { email: Like(`%${text}%`) }],
+    });
   }
 
   async findOneWithPassword(email: string): Promise<User> {

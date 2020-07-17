@@ -8,6 +8,9 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CoursePost } from 'src/ubtposts/ubtposts.entity';
+import { UsersService } from 'src/users/users.service';
+import { InvitationsService } from './invitations.service';
+import { Invitation } from './invitations.entity';
 
 @Injectable()
 export class CoursesService {
@@ -15,6 +18,8 @@ export class CoursesService {
     @InjectRepository(Course) private courses: Repository<Course>,
     @InjectRepository(CourseUser) private courseUsers: Repository<CourseUser>,
     @InjectRepository(CoursePost) private coursePosts: Repository<CoursePost>,
+    @InjectRepository(Invitation) private invitations: Repository<Invitation>,
+    private readonly usersService: UsersService,
   ) {}
 
   async checkPermission(courseId: string, userId: string) {
@@ -103,11 +108,29 @@ export class CoursesService {
     );
   }
 
-  async createCourseUser(courseUser: CourseUser) {
-    var courseUser = new CourseUser(courseUser);
+  async createCourseUser(cu: CourseUser) {
+    const courseUser = new CourseUser(cu);
 
     await this.courseUsers.insert(courseUser);
     return courseUser;
+  }
+
+  async searchUsers(text: string, courseId) {
+    const users = await this.usersService.searchUsers(text);
+
+    const courseUsers = await this.courseUsers.find({ where: { courseId } });
+    const invites = await this.invitations.find();
+
+    // This returns only the users that are not in the course and contain the text provided
+    const filteredUsers = users.filter(
+      (u) => !courseUsers.find((x) => x.userId === u.userId),
+    );
+
+    const finalUsers = filteredUsers.filter(
+      (u) => !invites.find((x) => x.userEmail === u.email),
+    );
+
+    return finalUsers;
   }
 
   //Course Posts

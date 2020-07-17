@@ -31,6 +31,8 @@ import { UsersService } from 'src/users/users.service';
 import { InvitationsService } from './invitations.service';
 import { Invitation } from './invitations.entity';
 import { CreateInvitationDto } from './invitations.dto';
+import { SearchUsersDto } from 'src/users/users.dto';
+import { User } from 'src/users/users.entity';
 
 @UseGuards(JwtAuthGuard)
 @Controller('courses')
@@ -439,6 +441,26 @@ export class CoursesController {
       await this.invitationsService.create(invitation);
       return await this.invitationsService.findOne(
         invitation.userEmail,
+        courseId,
+      );
+    }
+  }
+
+  @Post(':courseId/search-users')
+  async searchUsers(
+    @Param('courseId') courseId: string,
+    @Request() req,
+    @Body() searchUsersDto: SearchUsersDto,
+  ): Promise<User[]> {
+    const course = await this.coursesService.findOneById(courseId);
+    if (req.user.sub != course.ownerId) {
+      throw new ForbiddenException({
+        status: 403,
+        message: 'You dont have permission to send invitations in this course',
+      });
+    } else {
+      return await this.coursesService.searchUsers(
+        searchUsersDto.text,
         courseId,
       );
     }

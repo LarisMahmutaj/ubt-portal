@@ -7,6 +7,7 @@ import Course from './views/courses/Course.vue';
 import CreateCourse from './views/courses/CreateCourse.vue';
 import JoinedCourses from './views/courses/JoinedCourses.vue';
 import MyCourses from './views/courses/MyCourses.vue';
+import Invites from './views/courses/Invites.vue';
 
 export const routes = [
   {
@@ -33,5 +34,6 @@ export const routes = [
   },
   { path: '/create-course', name: 'createCourse', component: CreateCourse },
   { path: '/joined-courses', name: 'joinedCourses', component: JoinedCourses },
-  { path: '/my-courses', name: 'joinedCourses', component: MyCourses },
+  { path: '/my-courses', name: 'myCourses', component: MyCourses },
+  { path: '/invites', name: 'invites', component: Invites },
 ];

@@ -11,12 +11,12 @@
         <v-btn class="mx-5" small icon @click="refresh">
           <v-icon appennd dark>refresh</v-icon>
         </v-btn>
-        <v-btn class="mx-5" small icon>
+        <!-- <v-btn class="mx-5" small icon>
           <v-icon appennd dark>settings</v-icon>
         </v-btn>
         <v-btn class="mx-5" small icon>
           <v-icon appennd dark>account_circle</v-icon>
-        </v-btn>
+        </v-btn> -->
         <v-btn @click="onLogout" class="mx-5" small icon>
           <v-icon appennd dark>exit_to_app</v-icon>
         </v-btn>
@@ -69,7 +69,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
-        <v-list-item>
+        <v-list-item to="/invites">
           <v-list-item-icon>
             <v-icon>mdi-bell</v-icon>
           </v-list-item-icon>
@@ -111,7 +111,11 @@ export default {
     },
     async refresh() {
       this.loading = true;
-      await this.fetchUbtposts();
+      if (this.$route.params.courseId) {
+        await this.fetchCoursePosts(this.$route.params.courseId);
+      } else {
+        await this.fetchUbtposts();
+      }
       this.loading = false;
       this.$forceUpdate();
     },
