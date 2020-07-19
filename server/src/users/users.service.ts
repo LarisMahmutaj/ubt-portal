@@ -43,13 +43,13 @@ export class UsersService {
 
   async create(user: User): Promise<User> {
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
+      host: process.env.MAIL_HOST,
+      port: process.env.MAIL_PORT,
       secure: false,
       requireTLS: true,
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS,
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
       },
     });
 
