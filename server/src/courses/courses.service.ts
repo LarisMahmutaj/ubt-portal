@@ -9,7 +9,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CoursePost } from 'src/ubtposts/ubtposts.entity';
 import { UsersService } from 'src/users/users.service';
-import { InvitationsService } from './invitations.service';
 import { Invitation } from './invitations.entity';
 
 @Injectable()
@@ -121,7 +120,7 @@ export class CoursesService {
     const courseUsers = await this.courseUsers.find({ where: { courseId } });
     const invites = await this.invitations.find();
 
-    // This returns only the users that are not in the course and contain the text provided
+    // This returns only the users that are not in the course and contain the text provided, and also only the users that haven't been invited
     const filteredUsers = users.filter(
       (u) => !courseUsers.find((x) => x.userId === u.userId),
     );

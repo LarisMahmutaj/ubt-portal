@@ -69,7 +69,6 @@ export class UbtpostsController {
   }
 
   //Likes
-
   @Get(':id/likes')
   async getPostLikes(@Param('id') postId: string): Promise<UbtpostLike[]> {
     return await this.likesService.getPostLikes(postId);

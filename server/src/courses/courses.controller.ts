@@ -11,7 +11,6 @@ import {
   UseGuards,
   BadRequestException,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { Course, CourseUser, CoursePermission, Role } from './courses.entity';
@@ -101,7 +100,6 @@ export class CoursesController {
   }
 
   // CoursePosts
-
   @Get(':courseId/posts')
   async getCoursePosts(
     @Param('courseId') courseId,
@@ -208,7 +206,6 @@ export class CoursesController {
   }
 
   //Likes
-
   @Get(':courseId/posts/:postId/likes')
   async getPostLikes(
     @Param('courseId') courseId,
