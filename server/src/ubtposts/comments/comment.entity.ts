@@ -1,10 +1,10 @@
 import {
   Entity,
-  PrimaryColumn,
   ManyToOne,
   JoinColumn,
   Column,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { Ubtpost, CoursePost } from '../ubtposts.entity';
 import { User } from 'src/users/users.entity';
@@ -40,7 +40,7 @@ export class UbtpostComment {
   @Column('varchar', { length: 5000 })
   content: string;
 
-  @Column()
+  @CreateDateColumn()
   date: Date;
 }
 
@@ -75,6 +75,6 @@ export class CoursePostComment {
   @Column('varchar', { length: 5000 })
   content: string;
 
-  @Column()
+  @CreateDateColumn()
   date: Date;
 }

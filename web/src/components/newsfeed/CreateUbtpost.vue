@@ -74,7 +74,6 @@ export default {
     return {
       ubtpost: {
         content: '',
-        date: null,
         authorId: null,
       },
       showInfo: false,
@@ -99,23 +98,19 @@ export default {
         const courseId = this.$route.params.courseId;
         let newPost = { ...this.ubtpost };
 
-        newPost.date = new Date();
         newPost.authorId = this.user.userId;
         newPost.courseId = courseId;
 
         await this.createCoursePost({ courseId, newPost });
         await this.fetchCoursePosts(courseId);
         this.ubtpost.content = '';
-        this.ubtpost.date = null;
       } else {
         let newPost = { ...this.ubtpost };
 
-        newPost.date = new Date();
         newPost.authorId = this.user.userId;
         newPost.courseId = this.courseId;
 
         this.ubtpost.content = '';
-        this.ubtpost.date = null;
 
         await this.createUbtpost(newPost);
         await this.fetchUbtposts();

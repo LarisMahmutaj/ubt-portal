@@ -203,10 +203,6 @@ export default {
       loading: false,
       showComments: false,
       commentCount: 0,
-      newComment: {
-        content: '',
-        date: null,
-      },
       likes: [],
       liked: false,
     };

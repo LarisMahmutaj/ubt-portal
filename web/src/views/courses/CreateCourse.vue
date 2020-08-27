@@ -69,7 +69,6 @@ export default {
       course: {
         name: '',
         description: '',
-        date: null,
         privacy: {},
       },
       items: [
@@ -80,7 +79,6 @@ export default {
   },
   methods: {
     async onSubmit() {
-      this.course.date = new Date();
       const response = await CREATE_COURSE(this.course);
       const newCourse = response.data;
       this.$router.push({

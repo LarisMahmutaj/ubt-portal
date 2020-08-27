@@ -1,4 +1,10 @@
-import { Entity, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
+import {
+  Entity,
+  ManyToOne,
+  JoinColumn,
+  PrimaryColumn,
+  CreateDateColumn,
+} from 'typeorm';
 import { Ubtpost, CoursePost } from '../ubtposts.entity';
 import { User } from 'src/users/users.entity';
 
@@ -22,6 +28,9 @@ export class UbtpostLike {
   @ManyToOne((type) => User, { nullable: false })
   @JoinColumn({ name: 'userId' })
   user: User;
+
+  @CreateDateColumn()
+  date: Date;
 }
 
 @Entity()
@@ -48,4 +57,7 @@ export class CoursePostLike {
   })
   @JoinColumn({ name: 'userId' })
   user: User;
+
+  @CreateDateColumn()
+  date: Date;
 }

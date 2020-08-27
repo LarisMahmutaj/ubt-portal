@@ -96,7 +96,6 @@ export default {
       comments: [],
       newComment: {
         content: '',
-        date: null,
       },
       componentKey: 1,
       deleteDialog: false,
@@ -115,8 +114,6 @@ export default {
   },
   methods: {
     async postComment() {
-      this.newComment.date = new Date();
-
       const response = await CREATE_POST_COMMENT(
         this.postId,
         this.newComment,
@@ -124,7 +121,6 @@ export default {
       );
 
       this.newComment.content = '';
-      this.newComment.date = null;
       this.comments.push(response.data);
       this.$emit('commentPost');
     },

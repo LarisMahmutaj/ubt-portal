@@ -19,7 +19,7 @@ export class UbtpostsService {
   }
 
   async findOne(postId: string) {
-    return await this.ubtposts.findOne({ postId });
+    return await this.ubtposts.findOne(postId);
   }
 
   async create(ubtpost: Ubtpost) {

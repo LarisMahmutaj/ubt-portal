@@ -154,7 +154,8 @@ export class CoursesController {
     @Request() req,
     @Body() updateCoursePostDto: CreateCoursePostDto,
   ): Promise<CoursePost> {
-    if (req.user.sub !== updateCoursePostDto.authorId) {
+    const post = await this.coursesService.findOneCoursePost(postId);
+    if (req.user.sub !== post.postId) {
       throw new ForbiddenException({
         status: 403,
         error: 'You dont have permission to edit this post',

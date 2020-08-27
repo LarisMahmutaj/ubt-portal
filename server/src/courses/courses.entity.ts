@@ -5,6 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
   PrimaryColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { User } from 'src/users/users.entity';
 // import { Post } from '../ubtposts/ubtposts.entity';
@@ -42,7 +43,7 @@ export class Course {
   @Column()
   description: string;
 
-  @Column()
+  @CreateDateColumn()
   date: Date;
 
   @Column()

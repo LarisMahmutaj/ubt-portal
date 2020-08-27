@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { User } from 'src/users/users.entity';
 import { Course } from 'src/courses/courses.entity';
@@ -15,7 +16,7 @@ export abstract class Post {
   @Column('varchar', { length: 5000 })
   content: string;
 
-  @Column()
+  @CreateDateColumn()
   date: Date;
 
   @Column()
